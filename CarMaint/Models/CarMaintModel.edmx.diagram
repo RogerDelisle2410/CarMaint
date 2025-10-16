@@ -4,13 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="90d1a260b30040608a2d7341355f7654" Name="Diagram1" ZoomLevel="82">
+      <Diagram DiagramId="90d1a260b30040608a2d7341355f7654" Name="Diagram1" ZoomLevel="82" ShowGrid="false">
         <EntityTypeShape EntityType="BCATPModel.CustomerData" Width="1.5" PointX="0.625" PointY="0.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="BCATPModel.MaintenanceHistory" Width="1.75" PointX="5.875" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="BCATPModel.MaintenanceType" Width="1.5" PointX="8.875" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BCATPModel.MaintenanceHistory" Width="1.75" PointX="5.125" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BCATPModel.MaintenanceType" Width="2" PointX="9.75" PointY="1.25" IsExpanded="true" />
         <AssociationConnector Association="BCATPModel.FK_MaintenanceHistory_MaintenanceType" ManuallyRouted="false" />
         <AssociationConnector Association="BCATPModel.FK_MaintenanceHistory_CustomerData" />
-        <EntityTypeShape EntityType="BCATPModel.CarData" Width="1.5" PointX="3.25" PointY="3.5" />
+        <EntityTypeShape EntityType="BCATPModel.CarData" Width="1.5" PointX="5.125" PointY="0.5" />
         <AssociationConnector Association="BCATPModel.FK_CarData_CustomerData" />
         <AssociationConnector Association="BCATPModel.FK_MaintenanceHistory_CarData" />
       </Diagram>

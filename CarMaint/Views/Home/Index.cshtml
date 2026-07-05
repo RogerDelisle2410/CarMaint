@@ -1,14 +1,41 @@
-﻿
-@*@{
+﻿@{
     ViewBag.Title = "Home Page";
-}*@
+}
 
+<div class="home-fullscreen">
+    <div style="display:flex; height:100%; overflow:hidden; align-items:flex-start;">
 
-<div style="font-weight:bold">
-    <br /> 
-    @Html.ActionLink("Create a New Maintenance Ticket", "Index", "MaintTicket")<br /><br />
-    @Html.ActionLink("Customer Info", "Index", "CustomerDatas")<br /><br />
-    @Html.ActionLink("Car Info", "Index", "CarDatas")<br /><br />   
-    @Html.ActionLink("Maintenance Type", "Index", "MaintenanceTypes")<br /><br />
-    @Html.ActionLink("Maintenance History", "Index", "MaintenanceHistories")<br /><br />
-</div> 
+        <div style="
+            width:25%;
+            background:white;
+            padding:30px;
+            font-weight:bold;
+            font-size:14px;
+            line-height:1.8;
+            box-shadow:0 0 15px rgba(0,0,0,0.15);
+            border-radius:10px;
+            margin-left:20px;
+            margin-top:20px;
+        ">
+            @Html.ActionLink("New Maintenance Ticket", "Index", "MaintTicket")<br /><br />
+            @Html.ActionLink("Customer Info", "Index", "CustomerDatas")<br /><br />
+            @Html.ActionLink("Car Info", "Index", "CarDatas")<br /><br />
+            @Html.ActionLink("Maintenance Type", "Index", "MaintenanceTypes")<br /><br />
+            @Html.ActionLink("Maintenance History", "Index", "MaintenanceHistories")<br /><br />
+        </div>
+
+        <div style="
+            width:75%;
+            display:flex;
+            justify-content:center;
+            align-items:flex-start;
+            padding-left:40px;
+            padding-top:20px;
+        ">
+            <img src="~/Image/CrappyTire.png"
+                 alt="Crappy Tire"
+                 style="max-width:90%; height:80%;" />
+        </div>
+
+    </div>
+</div>

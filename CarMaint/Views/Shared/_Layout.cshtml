@@ -4,34 +4,66 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - JRD Consulting Inc.</title>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @*    @Scripts.Render("~/bundles/bootstrap")*@
     @RenderSection("scripts", required: false)
 
-    <script type='text/javascript'>    </script>
+    <style>
+        .body-wrapper {
+            padding: 5px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .home-fullscreen {
+            padding: 0 !important;
+            margin: 0 !important;
+            height: calc(85vh - 50px);
+            overflow: hidden;
+        }
+
+        .navbar-brand {
+            margin-left: -10px;
+        }
+    </style>
 </head>
+
 <body>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">               
-                @Html.ActionLink("Car Maintenance Project", "", "", new { area = "" }, new { @class = "navbar-brand" })
+        <div style="width:100%; padding-left:60px;">
+
+            @{
+                var controller = ViewContext.RouteData.Values["controller"].ToString();
+                var action = ViewContext.RouteData.Values["action"].ToString();
+
+                bool isHome = controller == "Home" && action == "Index";
+                string navTitle = isHome ? "Car Maintenance Project" : "Main Menu";
+            }
+
+            <div class="navbar-header">
+                @Html.ActionLink(navTitle, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
+
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav"> 
-                </ul>
+                <ul class="nav navbar-nav"></ul>
             </div>
 
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-         
-    </div>
 
-    
+    @if (isHome)
+    {
+        @RenderBody()
+    }
+    else
+    {
+        <div class="body-wrapper">
+            @RenderBody()
+        </div>
+    }
+
 </body>
 </html>
-
-

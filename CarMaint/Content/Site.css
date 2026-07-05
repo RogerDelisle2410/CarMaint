@@ -1,24 +1,100 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿/* GLOBAL SHRINK */
+html, body {
+    font-size: 12px;
 }
 
-/* Set padding to keep content from hitting the edges */
+/* Body content spacing */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+/* Form labels + inputs */
+.form-group label {
+    font-size: 12px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
+input:not([type=checkbox]),
 select,
 textarea {
-    max-width: 280px;
+    font-size: 12px;
+    max-width: 240px;
+    padding: 4px 6px;
 }
+
+/* TABLE SHRINK + MORE HEIGHT */
+.table-maintenance {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 6px;
+}
+
+    .table-maintenance thead th {
+        background: #004a99;
+        color: white;
+        padding: 10px; /* increased height */
+        font-size: 12px;
+        text-align: left;
+        border-radius: 6px 6px 0 0;
+    }
+
+    .table-maintenance tbody tr {
+        background: #ffffff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        border-radius: 6px !important;
+        transition: 0.1s ease-in-out;
+        min-height: 40px; /* recommended row height */
+    }
+
+        .table-maintenance tbody tr:hover {
+            transform: scale(1.01);
+        }
+
+    .table-maintenance tbody td {
+        padding: 10px; /* increased height */
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+        .table-maintenance tbody td.checkbox-cell {
+            text-align: center;
+        }
+
+/* PERFECT WHITE CHECKBOX + CENTERED BLACK CHECKMARK */
+input[type=checkbox] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+}
+
+    input[type=checkbox]:checked::after {
+        content: "✔";
+        font-size: 14px;
+        font-weight: bold;
+        color: black;
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+/* Action links */
+.action-links a {
+    margin-right: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #004a99;
+}
+
+    .action-links a:hover {
+        text-decoration: underline;
+        color: #007bff;
+    }

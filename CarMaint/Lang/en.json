@@ -1,0 +1,137 @@
+﻿{
+  "nav_home": "Car Maintenance Project",
+  "nav_menu": "Main Menu",
+
+  "menu_new_ticket": "New Maintenance Ticket",
+  "menu_customer_info": "Customer Info",
+  "menu_car_info": "Car Info",
+  "menu_maint_type": "Maintenance Type",
+  "menu_maint_history": "Maintenance History",
+
+  "ticket_title": "Maintenance Ticket",
+  "ticket_select_customer": "Select Customer",
+  "ticket_find_by_name": "Find by Customer Name",
+  "ticket_search": "Search",
+
+  "col_name": "Name",
+  "col_address": "Address",
+  "col_city": "City",
+  "col_postal": "Postal Code",
+  "col_phone": "Phone Number",
+  "col_select_customer": "Select Customer",
+
+  "btn_select": "Select",
+
+  "cust_title": "Customer Info",
+  "cust_find_by_name": "Find by name",
+  "cust_search": "Search",
+  "cust_create_new": "Create New",
+
+  "btn_edit": "Edit",
+  "btn_details": "Details",
+  "btn_delete": "Delete",
+
+  "veh_title": "Vehicle Info",
+  "veh_find_brand": "Find by Brand name",
+  "veh_search": "Search",
+  "veh_create_new": "Create New",
+
+  "col_customer_name": "Customer Name",
+  "col_manufacturer": "Manufacturer",
+  "col_model": "Model",
+  "col_year": "Year",
+  "col_engine": "Engine Type",
+  "col_mileage": "Mileage",
+
+  "maint_title": "Type of Maintenance",
+  "maint_create_new": "Create New",
+  "col_task_name": "Type of Service",
+  "col_maint_id": "ID",
+  "col_taskname": "Task Name",
+  "col_type": "Type of Service",
+  "col_cost": "Cost",
+  "col_gas": "Gas",
+  "col_diesel": "Diesel",
+  "col_electric": "Electric",
+
+  "hist_title": "Maintenance History",
+  "hist_find_by_name": "Find by name",
+  "hist_search": "Search",
+  "hist_total_cost": "Total Cost",
+
+  "col_hist_customer": "Customer Name",
+  "col_hist_manufacturer": "Manufacturer",
+  "col_hist_task": "Task Name",
+  "col_hist_date": "Date",
+  "col_hist_cost": "Cost",
+
+  "maint_find_by_task": "Find by task name",
+  "maint_search": "Search",
+
+  "customer": "Customer",
+  "maintenance_ticket": "Maintenance Ticket",
+  "select_vehicle_to_maintain": "Select Vehicle to Maintain",
+  "manufacturer": "Manufacturer",
+  "model": "Model",
+  "engine_type": "Engine Type",
+  "year": "Year",
+  "select_vehicle": "Select Vehicle",
+  "select_car": "Select Car",
+
+  "ticket_select_vehicle": "Select Vehicle to Maintain",
+  "col_customer": "Customer",
+  "col_engine_type": "Engine Type",
+  "col_select_vehicle": "Select Vehicle",
+  "btn_select_car": "Select Car",
+
+  "ticket_select_type_required": "Select Type of Maintenance Required",
+  "msg_history_updated": "The Maintenance History has been updated",
+  "msg_ajax_error": "Error on AJAX post",
+
+  "btn_create_ticket": "Create Ticket",
+  "col_total": "Total:",
+
+  "edit_title": "Edit",
+  "edit_customer_info": "Customer Info",
+  "edit_save": "Save",
+  "edit_back_to_list": "Back to List",
+
+  "details_title": "Details",
+  "details_customer_info": "Customer Info",
+  "details_edit": "Edit",
+  "details_back_to_list": "Back to List",
+
+  "delete_title": "Delete",
+  "delete_confirm": "Are you sure you want to delete this?",
+  "delete_customer_info": "Customer Info",
+  "delete_button": "Delete",
+  "delete_back_to_list": "Back to List",
+
+  "create_title": "Create",
+  "create_customer_info": "Customer Info",
+  "create_button": "Create",
+  "create_back_to_list": "Back to List",
+
+  "car_edit_title": "Edit Car",
+  "car_edit_info": "Car Info",
+  "car_edit_save": "Save",
+  "car_edit_back": "Back to List",
+
+  "car_details_title": "Car Details",
+  "car_details_info": "Car Info",
+  "car_details_edit": "Edit",
+  "car_details_back": "Back to List",
+
+  "car_delete_title": "Delete Car",
+  "car_delete_confirm": "Are you sure you want to delete this?",
+  "car_delete_info": "Car Info",
+  "car_delete_button": "Delete",
+  "car_delete_back": "Back to List",
+
+  "car_create_title": "Create Car",
+  "car_create_info": "Car Info",
+  "car_create_button": "Create",
+  "car_create_back": "Back to List" 
+
+
+}

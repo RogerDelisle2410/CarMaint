@@ -1,0 +1,149 @@
+﻿{
+  "nav_home": "Proyecto de Mantenimiento de Autos",
+  "nav_menu": "Menú Principal",
+
+  "menu_new_ticket": "Nuevo Ticket de Mantenimiento",
+  "menu_customer_info": "Información del Cliente",
+  "menu_car_info": "Información del Auto",
+  "menu_maint_type": "Tipo de Mantenimiento",
+  "menu_maint_history": "Historial de Mantenimiento",
+
+  "ticket_title": "Ticket de Mantenimiento",
+  "ticket_select_customer": "Seleccionar Cliente",
+  "ticket_find_by_name": "Buscar por Nombre del Cliente",
+  "ticket_search": "Buscar",
+
+  "col_name": "Nombre",
+  "col_address": "Dirección",
+  "col_city": "Ciudad",
+  "col_postal": "Código Postal",
+  "col_phone": "Número de Teléfono",
+  "col_select_customer": "Seleccionar Cliente",
+
+  "btn_select": "Seleccionar",
+
+  "cust_title": "Información del Cliente",
+  "cust_find_by_name": "Buscar por nombre",
+  "cust_search": "Buscar",
+  "cust_create_new": "Crear Nuevo",
+
+  "btn_edit": "Editar",
+  "btn_details": "Detalles",
+  "btn_delete": "Eliminar",
+
+  "veh_title": "Información del Vehículo",
+  "veh_find_brand": "Buscar por marca",
+  "veh_search": "Buscar",
+  "veh_create_new": "Crear Nuevo",
+
+  "col_customer_name": "Nombre del Cliente",
+  "col_manufacturer": "Fabricante",
+  "col_model": "Modelo",
+  "col_year": "Año",
+  "col_engine": "Tipo de Motor",
+  "col_mileage": "Kilometraje",
+
+  "maint_title": "Tipo de mantenimiento",
+  "maint_create_new": "Crear nuevo",
+  "col_task_name": "Tipo de servicio",
+  "col_maint_id": "ID",
+  "col_taskname": "Nombre de la tarea",
+  "col_type": "Tipo de servicio",
+  "col_cost": "Costo",
+  "col_gas": "Gasolina",
+  "col_diesel": "Diésel",
+  "col_electric": "Eléctrico",
+
+  "hist_title": "Historial de Mantenimiento",
+  "hist_find_by_name": "Buscar por nombre",
+  "hist_search": "Buscar",
+  "hist_total_cost": "Costo Total",
+
+  "col_hist_customer": "Nombre del Cliente",
+  "col_hist_manufacturer": "Fabricante",
+  "col_hist_task": "Nombre de la Tarea",
+  "col_hist_date": "Fecha",
+  "col_hist_cost": "Costo",
+
+  "maint_find_by_task": "Buscar por nombre de tarea",
+  "maint_search": "Buscar",
+
+  "customer": "Cliente",
+  "maintenance_ticket": "Ticket de mantenimiento",
+  "select_vehicle_to_maintain": "Seleccionar vehículo para mantenimiento",
+  "manufacturer": "Fabricante",
+  "model": "Modelo",
+  "engine_type": "Tipo de motor",
+  "year": "Año",
+  "select_vehicle": "Seleccionar vehículo",
+  "select_car": "Seleccionar coche",
+
+  "select_type_of_maintenance_required": "Seleccionar tipo de mantenimiento requerido",
+  "maint_id": "ID de mantenimiento",
+  "task_name": "Nombre de la tarea",
+  "cost": "Costo",
+  "select": "Seleccionar",
+  "type": "Tipo",
+  "create_ticket": "Crear ticket",
+  "total": "Total:",
+  "maintenance_history_updated": "El historial de mantenimiento ha sido actualizado",
+  "ajax_error": "Error en la solicitud AJAX",
+
+  "ticket_select_vehicle": "Seleccionar vehículo para mantenimiento",
+  "col_customer": "Cliente",
+  "col_engine_type": "Tipo de motor",
+  "col_select_vehicle": "Seleccionar vehículo",
+  "btn_select_car": "Seleccionar coche",
+
+  "ticket_select_type_required": "Seleccionar tipo de mantenimiento requerido",
+  "msg_history_updated": "El historial de mantenimiento ha sido actualizado",
+  "msg_ajax_error": "Error en la solicitud AJAX",
+
+  "btn_create_ticket": "Crear ticket",
+  "col_total": "Total:",
+
+  "edit_title": "Editar",
+  "edit_customer_info": "Información del cliente",
+  "edit_save": "Guardar",
+  "edit_back_to_list": "Volver a la lista",
+
+  "details_title": "Detalles",
+  "details_customer_info": "Información del cliente",
+  "details_edit": "Editar",
+  "details_back_to_list": "Volver a la lista",
+
+  "delete_title": "Eliminar",
+  "delete_confirm": "¿Está seguro de que desea eliminar esto?",
+  "delete_customer_info": "Información del cliente",
+  "delete_button": "Eliminar",
+  "delete_back_to_list": "Volver a la lista",
+
+  "create_title": "Crear",
+  "create_customer_info": "Información del cliente",
+  "create_button": "Crear",
+  "create_back_to_list": "Volver a la lista",
+
+  "car_edit_title": "Editar vehículo",
+  "car_edit_info": "Información del vehículo",
+  "car_edit_save": "Guardar",
+  "car_edit_back": "Volver a la lista",
+
+  "car_details_title": "Detalles del vehículo",
+  "car_details_info": "Información del vehículo",
+  "car_details_edit": "Editar",
+  "car_details_back": "Volver a la lista",
+
+  "car_delete_title": "Eliminar vehículo",
+  "car_delete_confirm": "¿Está seguro de que desea eliminar esto?",
+  "car_delete_info": "Información del vehículo",
+  "car_delete_button": "Eliminar",
+  "car_delete_back": "Volver a la lista",
+
+  "car_create_title": "Crear vehículo",
+  "car_create_info": "Información del vehículo",
+  "car_create_button": "Crear",
+  "car_create_back": "Volver a la lista" 
+
+
+
+}

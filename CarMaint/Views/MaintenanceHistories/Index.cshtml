@@ -1,17 +1,26 @@
 ﻿@model IEnumerable<CarMaint.Models.MaintenanceHistory>
 
 @{
-    ViewBag.Title = "Index";
+    string lang = "en";
+    if (Request.Cookies["lang"] != null)
+    {
+        lang = Request.Cookies["lang"].Value;
+    }
 
+    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+    string jsonText = System.IO.File.ReadAllText(jsonPath);
+    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+
+    ViewBag.Title = Lang["hist_title"].ToString();
 }
 
-<h2>Maintenance History</h2>
+<h2>@Lang["hist_title"]</h2>
 
 @using (Html.BeginForm())
 {
     <p>
-        Find by name: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
+        @Lang["hist_find_by_name"]: @Html.TextBox("SearchString")
+        <input type="submit" value="@Lang["hist_search"]" />
     </p>
 }
 
@@ -20,7 +29,6 @@
         table {
             width: 90%;
             table-layout: fixed;
-            /*border-collapse: collapse;*/
         }
 
         td {
@@ -36,7 +44,6 @@
     <script type="text/javascript">
         function makeTableScroll() {
             var maxRows = 10;
-
             var table = document.getElementById('myTable');
             var wrapper = table.parentNode;
             var rowsInTable = table.rows.length;
@@ -49,96 +56,75 @@
             }
         }
     </script>
-
 </head>
+
 <body>
     <br />
     <table id="myTable2" class="table">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerData.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CarData.Manufacturer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaintenanceType.TaskName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th style="text-align: right; vertical-align: middle;">
-                @Html.DisplayNameFor(model => model.Cost)
-            </th>
+            <th>@Lang["col_hist_customer"]</th>
+            <th>@Lang["col_hist_manufacturer"]</th>
+            <th>@Lang["col_hist_task"]</th>
+            <th>@Lang["col_hist_date"]</th>
+            <th style="text-align:left;">@Lang["col_hist_cost"]</th>
             <th></th>
         </tr>
     </table>
 </body>
+
 <body onload="makeTableScroll();">
     <div class="scrollingTable">
         <table id="myTable" class="table">
-            @* @foreach (var item in Model)*@
 
             @foreach (var group in Model.GroupBy(p => p.CustId))
             {
                 foreach (var item in group)
                 {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CustomerData.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CarData.Manufacturer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MaintenanceType.TaskName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date)
-                        </td>
-                        <td style="text-align: right; vertical-align: middle;">
-                            @string.Format("{0:c}", item.Cost)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.HistoryId }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.HistoryId }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.HistoryId })
+                        <td>@Html.DisplayFor(modelItem => item.CustomerData.Name)</td>
+                        <td style="text-align: center;">@Html.DisplayFor(modelItem => item.CarData.Manufacturer)</td>
+                        <td style="text-align: center;">@Html.DisplayFor(modelItem => item.MaintenanceType.TaskName)</td>
+                        <td style="text-align: right;">@Html.DisplayFor(modelItem => item.Date)</td>
+                        <td style="text-align:right;">@string.Format("{0:c}", item.Cost)</td>
+
+                        <td style="text-align: center;">
+                            @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.HistoryId }) |
+                            @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.HistoryId }) |
+                            @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.HistoryId })
                         </td>
                     </tr>
                 }
+
                 <tr>
                     <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th style="text-align: right; vertical-align: middle;  text-decoration:overline; font-weight: bold;">
-                        Total Cost:   @string.Format("{0:c}", @group.Sum(x => x.Cost))
+                    <th style="text-align:right; text-decoration:overline; font-weight:bold;">
+                        @Lang["hist_total_cost"]: @string.Format("{0:c}", group.Sum(x => x.Cost))
                     </th>
                 </tr>
-            } 
-            
+            }
+
         </table>
     </div>
 </body>
+
 <body>
     <div>
         <table id="myTable3">
             <tr>
-                <th style="background-color:white">
-                </th>
-                <th style="background-color:white">
-                </th>
-                <th style="background-color:white">
-                </th>
+                <th style="background-color:white"></th>
+                <th style="background-color:white"></th>
+                <th style="background-color:white"></th>
                 <th>
                     @if (ViewBag.Total > 0)
                     {
                     <th>
-                        Total Cost:
+                        @Lang["hist_total_cost"]:
                         @(((decimal)ViewBag.Total).ToString("C2"))
                     </th>
-                    }
-
+                }
                     </th>
                 </tr>
             </table>

@@ -16,28 +16,68 @@ namespace CarMaint.Controllers
         public decimal theCost;
         public int maId;
 
-        public class Article
+        // ---------------------------
+        // LANGUAGE + TRANSLATION HELPERS
+        // ---------------------------
+
+        private string GetLang()
         {
-            public string Title { get; set; }
-            public string Categories { get; set; }
+            string lang = "en";
+            if (Request.Cookies["lang"] != null)
+                lang = Request.Cookies["lang"].Value;
+
+            return lang;
         }
+
+        private void ApplyTaskNameTranslation(IEnumerable<MaintenanceType> items)
+        {
+            string lang = GetLang();
+
+            foreach (var m in items)
+            {
+                if (lang == "fr")
+                    m.TaskName = m.TaskName_FR;
+                else if (lang == "es")
+                    m.TaskName = m.TaskName_ES;
+                else
+                    m.TaskName = m.TaskName_EN;
+            }
+        }
+
+        private void ApplyTaskNameTranslation(MaintenanceType item)
+        {
+            string lang = GetLang();
+
+            if (lang == "fr")
+                item.TaskName = item.TaskName_FR;
+            else if (lang == "es")
+                item.TaskName = item.TaskName_ES;
+            else
+                item.TaskName = item.TaskName_EN;
+        }
+
+
+        // ---------------------------
+        // CONTROLLER ACTIONS
+        // ---------------------------
+
         // GET: NewMaint
         public ActionResult Index(string searchString)
         {
             var customer = from s in db.CustomerDatas
                            select s;
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 customer = customer.Where(s => s.Name.Contains(searchString));
             }
+
             return View(customer.ToList().OrderBy(t => t.Name));
         }
 
         public ActionResult Select(int id)
         {
-            var cust = from cu in db.CustomerDatas
-                       select cu;
-            cust = cust.Where(cu => cu.CustomerId.Equals(id));
+            var cust = db.CustomerDatas.Where(cu => cu.CustomerId == id);
 
             foreach (var item in cust)
             {
@@ -45,18 +85,14 @@ namespace CarMaint.Controllers
                 Session["CustomerId"] = item.CustomerId;
             }
 
-            var car = from ca in db.CarDatas
-                      select ca;
-            car = car.Where(ca => ca.CustomerId.Equals(id));
+            var car = db.CarDatas.Where(ca => ca.CustomerId == id);
 
             return View(car.ToList().OrderBy(t => t.Manufacturer));
         }
 
         public ActionResult SelectCar(string engineType, int carId)
         {
-            var car = from ca in db.CarDatas
-                      select ca;
-            car = car.Where(ca => ca.CarId.Equals(carId));
+            var car = db.CarDatas.Where(ca => ca.CarId == carId);
 
             foreach (var item in car)
             {
@@ -67,21 +103,28 @@ namespace CarMaint.Controllers
                 Session["Year"] = item.Year;
             }
 
-            var maint = from ma in db.MaintenanceTypes
-                        select ma;
+            var maint = db.MaintenanceTypes.AsQueryable();
+
             switch (engineType)
             {
                 case "Gas":
-                    maint = maint.Where(ma => ma.Gas.Equals(true));
+                    maint = maint.Where(ma => ma.Gas == true);
                     break;
                 case "Diesel":
-                    maint = maint.Where(ma => ma.Diesel.Equals(true));
+                    maint = maint.Where(ma => ma.Diesel == true);
                     break;
                 case "Electric":
-                    maint = maint.Where(ma => ma.Electric.Equals(true));
+                    maint = maint.Where(ma => ma.Electric == true);
                     break;
             }
-            return View(maint.ToList().OrderBy(t => t.TaskName));
+
+            // IMPORTANT: SQL cannot sort by TaskName (not a column)
+            // So we translate first, then sort in memory.
+            var list = maint.ToList();
+            ApplyTaskNameTranslation(list);
+            list = list.OrderBy(t => t.TaskName).ToList(); 
+
+            return View(list);
         }
 
         [HttpPost]
@@ -94,9 +137,8 @@ namespace CarMaint.Controllers
             {
                 MaintenanceHistory maintenanceHistory = new MaintenanceHistory();
                 var maId = Convert.ToInt16(it);
-                var maintCost = from ma in db.MaintenanceTypes
-                                select ma;
-                maintCost = maintCost.Where(ma => ma.MaintId.Equals(maId));
+
+                var maintCost = db.MaintenanceTypes.Where(ma => ma.MaintId == maId);
 
                 foreach (var item in maintCost)
                 {
@@ -106,11 +148,12 @@ namespace CarMaint.Controllers
                 maintenanceHistory.CarId = (int)cac;
                 maintenanceHistory.CustId = (int)cu;
                 maintenanceHistory.Date = DateTime.Now;
-                maintenanceHistory.MaintId = Convert.ToInt16(maId);
+                maintenanceHistory.MaintId = maId;
+
                 db.MaintenanceHistories.Add(maintenanceHistory);
                 db.SaveChanges();
             }
-            //return Json(arrayOfValues);
+
             return Json(new
             {
                 redirectUrl = Url.Action("Index", "Home"),
@@ -119,4 +162,3 @@ namespace CarMaint.Controllers
         }
     }
 }
-

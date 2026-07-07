@@ -76,11 +76,13 @@ GO
 -- Creating table 'MaintenanceTypes'
 CREATE TABLE [dbo].[MaintenanceTypes] (
     [MaintId] int IDENTITY(1,1) NOT NULL,
-    [TaskName] nvarchar(50)  NOT NULL,
+    [TaskName_EN] nvarchar(50)  NOT NULL,
     [Cost] nvarchar(50)  NOT NULL,
     [Gas] bit  NOT NULL,
     [Diesel] bit  NOT NULL,
-    [Electric] bit  NOT NULL
+    [Electric] bit  NOT NULL,
+    [TaskName_FR] nvarchar(200)  NOT NULL,
+    [TaskName_ES] nvarchar(200)  NOT NULL,
 );
 GO
 

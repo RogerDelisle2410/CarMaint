@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -14,24 +13,84 @@ namespace CarMaint.Controllers
     {
         private readonly BCATPEntities1 db = new BCATPEntities1();
 
-        // GET: MaintenanceTypes
-        public ActionResult Index()
+        // ---------------------------
+        // LANGUAGE + TRANSLATION HELPERS
+        // ---------------------------
+
+        private string GetLang()
         {
-            return View(db.MaintenanceTypes.ToList().OrderBy(t => t.TaskName));
+            string lang = "en";
+            if (Request.Cookies["lang"] != null)
+                lang = Request.Cookies["lang"].Value;
+
+            return lang;
         }
+
+        private void ApplyTaskNameTranslation(IEnumerable<MaintenanceType> items)
+        {
+            string lang = GetLang();
+
+            foreach (var m in items)
+            {
+                if (lang == "fr")
+                    m.TaskName = m.TaskName_FR;
+                else if (lang == "es")
+                    m.TaskName = m.TaskName_ES;
+                else
+                    m.TaskName = m.TaskName_EN;
+            }
+        }
+
+        private void ApplyTaskNameTranslation(MaintenanceType item)
+        {
+            string lang = GetLang();
+
+            if (lang == "fr")
+                item.TaskName = item.TaskName_FR;
+            else if (lang == "es")
+                item.TaskName = item.TaskName_ES;
+            else
+                item.TaskName = item.TaskName_EN;
+        }
+
+
+        // ---------------------------
+        // CONTROLLER ACTIONS
+        // ---------------------------
+
+        // GET: MaintenanceTypes
+        public ActionResult Index(string SearchString)
+        {
+            var maint = db.MaintenanceTypes.ToList();
+
+            // Translate first
+            ApplyTaskNameTranslation(maint);
+
+            // Filter AFTER translation
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                maint = maint.Where(m => m.TaskName.Contains(SearchString)).ToList();
+            }
+
+            // Sort AFTER translation
+            maint = maint.OrderBy(m => m.TaskName).ToList();
+
+            return View(maint);
+        }
+
 
         // GET: MaintenanceTypes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             MaintenanceType maintenanceType = db.MaintenanceTypes.Find(id);
             if (maintenanceType == null)
-            {
                 return HttpNotFound();
-            }
+
+            ApplyTaskNameTranslation(maintenanceType);
+
             return View(maintenanceType);
         }
 
@@ -42,11 +101,9 @@ namespace CarMaint.Controllers
         }
 
         // POST: MaintenanceTypes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MaintId,TaskName,Cost,Gas,Diesel,Electric")] MaintenanceType maintenanceType)
+        public ActionResult Create([Bind(Include = "MaintId,TaskName_EN,TaskName_FR,TaskName_ES,Cost,Gas,Diesel,Electric")] MaintenanceType maintenanceType)
         {
             if (ModelState.IsValid)
             {
@@ -62,23 +119,19 @@ namespace CarMaint.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             MaintenanceType maintenanceType = db.MaintenanceTypes.Find(id);
             if (maintenanceType == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(maintenanceType);
         }
 
         // POST: MaintenanceTypes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaintId,TaskName,Cost,Gas,Diesel,Electric")] MaintenanceType maintenanceType)
+        public ActionResult Edit([Bind(Include = "MaintId,TaskName_EN,TaskName_FR,TaskName_ES,Cost,Gas,Diesel,Electric")] MaintenanceType maintenanceType)
         {
             if (ModelState.IsValid)
             {
@@ -86,6 +139,7 @@ namespace CarMaint.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             return View(maintenanceType);
         }
 
@@ -93,14 +147,14 @@ namespace CarMaint.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             MaintenanceType maintenanceType = db.MaintenanceTypes.Find(id);
             if (maintenanceType == null)
-            {
                 return HttpNotFound();
-            }
+
+            ApplyTaskNameTranslation(maintenanceType);
+
             return View(maintenanceType);
         }
 
@@ -118,9 +172,8 @@ namespace CarMaint.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
+
             base.Dispose(disposing);
         }
     }

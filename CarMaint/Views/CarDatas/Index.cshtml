@@ -1,23 +1,38 @@
 ﻿@model IEnumerable<CarMaint.Models.CarData>
 
 @{
-    ViewBag.Title = "Index";
+    string lang = "en";
+    if (Request.Cookies["lang"] != null)
+    {
+        lang = Request.Cookies["lang"].Value;
+    }
+
+    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+    string jsonText = System.IO.File.ReadAllText(jsonPath);
+    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+
+    ViewBag.Title = Lang["veh_title"].ToString();
 }
 
-<h2>Vehicle Info</h2>
+<h2>@Lang["veh_title"]</h2>
+
 @using (Html.BeginForm())
 {
     <p>
-        Find by Brand name: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
+        @Lang["veh_find_brand"]: @Html.TextBox("SearchString")
+        <input type="submit" value="@Lang["veh_search"]" />
     </p>
 }
+
+<p>
+    @Html.ActionLink(Lang["veh_create_new"].ToString(), "Create")
+</p>
+
 <head>
     <style type="text/css">
         table {
             width: 90%;
             table-layout: fixed;
-            /*border-collapse: collapse;*/
         }
 
         td {
@@ -33,7 +48,6 @@
     <script type="text/javascript">
         function makeTableScroll() {
             var maxRows = 10;
-
             var table = document.getElementById('myTable');
             var wrapper = table.parentNode;
             var rowsInTable = table.rows.length;
@@ -46,71 +60,43 @@
             }
         }
     </script>
-
 </head>
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 <body>
     <br />
     <table id="myTable2" class="table">
         <tr>
-            <th>
-                Customer Name
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Manufacturer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
-            </th>
-            <th style="text-align: center; vertical-align: middle;">
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th style="text-align: center; vertical-align: middle;">
-                @Html.DisplayNameFor(model => model.EngineType)
-            </th>
-            <th style="text-align: right; vertical-align: middle;">
-                @Html.DisplayNameFor(model => model.Mileage)
-            </th>
-
+            <th>@Lang["col_customer_name"]</th>
+            <th>@Lang["col_manufacturer"]</th>
+            <th>@Lang["col_model"]</th>
+            <th>@Lang["col_year"]</th>
+            <th>@Lang["col_engine"]</th>
+            <th>@Lang["col_mileage"]</th>
             <th></th>
         </tr>
     </table>
 </body>
+
 <body onload="makeTableScroll();">
     <div class="scrollingTable">
         <table id="myTable" class="table">
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CustomerData.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Manufacturer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Model)
-                    </td>
-                    <td style="text-align: center; vertical-align: middle;">
-                        @Html.DisplayFor(modelItem => item.Year)
-                    </td>
-                    <td style="text-align: center; vertical-align: middle;">
-                        @Html.DisplayFor(modelItem => item.EngineType)
-                    </td>
-                    <td style="text-align: right; vertical-align: middle;">
-                        @Html.DisplayFor(modelItem => item.Mileage)
-                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.CustomerData.Name)</td>
+                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Manufacturer)</td>
+                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Model)</td>
+                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Year)</td>
+                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.EngineType)</td>
+                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Mileage)</td>
 
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.CarId }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.CarId }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.CarId })
+                    <td style="text-align: center; width:200px;">
+                        @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.CarId }) |
+                        @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.CarId }) |
+                        @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.CarId })
                     </td>
                 </tr>
             }
-
         </table>
     </div>
 </body>

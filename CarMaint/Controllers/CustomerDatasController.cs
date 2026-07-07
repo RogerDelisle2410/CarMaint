@@ -45,7 +45,7 @@ namespace CarMaint.Controllers
         // GET: CustomerDatas/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new CustomerData());
         }
 
         // POST: CustomerDatas/Create

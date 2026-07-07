@@ -1,73 +1,56 @@
 ﻿@model CarMaint.Models.CarData
 
 @{
-    ViewBag.Title = "Delete";
+    string lang = "en";
+    if (Request.Cookies["lang"] != null)
+    {
+        lang = Request.Cookies["lang"].Value;
+    }
+
+    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+    string jsonText = System.IO.File.ReadAllText(jsonPath);
+    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+
+    ViewBag.Title = Lang["car_delete_title"].ToString();
 }
 
-<h2>Delete</h2>
+<h2>@Lang["car_delete_title"]</h2>
+<h3>@Lang["car_delete_confirm"]</h3>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Car Info</h4>
+    <h4>@Lang["car_delete_info"]</h4>
     <hr />
+
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Manufacturer)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Manufacturer)
-        </dd>
+        <dt>@Lang["col_manufacturer"]</dt>
+        <dd>@Html.DisplayFor(model => model.Manufacturer)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Model)
-        </dt>
+        <dt>@Lang["col_model"]</dt>
+        <dd>@Html.DisplayFor(model => model.Model)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Model)
-        </dd>
+        <dt>@Lang["col_year"]</dt>
+        <dd>@Html.DisplayFor(model => model.Year)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
+        <dt>@Lang["col_engine_type"]</dt>
+        <dd>@Html.DisplayFor(model => model.EngineType)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Year)
-        </dd>
+        <dt>@Lang["col_mileage"]</dt>
+        <dd>@Html.DisplayFor(model => model.Mileage)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.EngineType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EngineType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Mileage)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Mileage)
-        </dd>
-
-        <dt>
-            Customer Name
-            @*@Html.DisplayNameFor(model => model.CustomerData.Name)*@
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CustomerData.Name)
-        </dd>
+        <dt>@Lang["col_customer_name"]</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerData.Name)</dd>
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="@Lang["car_delete_button"]" class="btn btn-default" />
+            |
+            @Html.ActionLink(Lang["car_delete_back"].ToString(), "Index")
         </div>
     }
 </div>

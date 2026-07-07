@@ -1,101 +1,111 @@
 ﻿@model IEnumerable<CarMaint.Models.CarData>
 
+@using System.IO
+@using Newtonsoft.Json.Linq
+
 @{
-    ViewBag.Title = "SelectCust";
+    string lang = "en";
+
+    var cookie = Request.Cookies["lang"];
+    if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+    {
+        lang = cookie.Value;
+    }
+
+    string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+    string jsonText = File.ReadAllText(jsonPath);
+    JObject Lang = JObject.Parse(jsonText);
+
+    ViewBag.Title = Lang["ticket_title"].ToString();
 }
-<h2>Maintenance Ticket</h2>
-<h4>Select Vehicle to Maintain</h4>
-<head>
-    <style type="text/css">
-        table {
-            width: 90%;
-            table-layout: fixed;
-            /*border-collapse: collapse;*/
-        }
 
-        td {
-            border: 1px solid black;
-        }
 
-        .scrollingTable {
-            width: 1150px;
-            overflow-y: auto;
-        }
-    </style>
+<h2>@Lang["ticket_title"]</h2>
+<h4>@Lang["ticket_select_vehicle"]</h4>
 
-    <script type="text/javascript">
-        function makeTableScroll() {
-            var maxRows = 10;
+<style>
+    table {
+        width: 90%;
+        table-layout: fixed;
+    }
 
-            var table = document.getElementById('myTable');
-            var wrapper = table.parentNode;
-            var rowsInTable = table.rows.length;
-            var height = 0;
-            if (rowsInTable > maxRows) {
-                for (var i = 0; i < maxRows; i++) {
-                    height += table.rows[i].clientHeight;
-                }
-                wrapper.style.height = height + "px";
+    td {
+        border: 1px solid black;
+    }
+
+    .scrollingTable {
+        width: 1150px;
+        overflow-y: auto;
+    }
+</style>
+
+<script>
+    function makeTableScroll() {
+        var maxRows = 10;
+        var table = document.getElementById('vehicleTable');
+        var wrapper = table.parentNode;
+        var rowsInTable = table.rows.length;
+        var height = 0;
+
+        if (rowsInTable > maxRows) {
+            for (var i = 0; i < maxRows; i++) {
+                height += table.rows[i].clientHeight;
             }
+            wrapper.style.height = height + "px";
         }
-    </script>
-</head>
+    }
+</script>
 
-<br>
-<body>
-    <table id="myTable2" class="">
-        <tr>
-            <th>Customer</th>
-        <tr>
-    </table>
+<br />
 
-    <table id="myTable" class="table  col-lg-12 ">
-        <tr>
-            <td class="col-lg-3  ">
-                @Session["CustomerName"].ToString()
-            </td>
+<table>
+    <tr>
+        <th>@Lang["col_customer"]</th>
+    </tr>
+</table>
 
-            <th class="col-lg-11" style="border: none"></th>
-        </tr>
+<table class="table col-lg-12">
+    <tr>
+        <td class="col-lg-3">@Session["CustomerName"]</td>
+        <th class="col-lg-11" style="border:none"></th>
+    </tr>
+</table>
+
+<br />
+
+<table class="col-lg-12" style="text-align:center">
+    <tr>
+        <th class="col-lg-2">@Lang["col_manufacturer"]</th>
+        <th class="col-lg-2">@Lang["col_model"]</th>
+        <th class="col-lg-2">@Lang["col_engine_type"]</th>
+        <th class="col-lg-1">@Lang["col_year"]</th>
+        <th class="col-lg-2">@Lang["col_select_vehicle"]</th>
+        <th class="col-lg-3" style="border:none"></th>
+    </tr>
+</table>
+
+<div class="scrollingTable" onload="makeTableScroll();">
+    <table id="vehicleTable" class="table col-lg-12">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="col-lg-2">@item.Manufacturer</td>
+                <td class="col-lg-2">@item.Model</td>
+                <td class="col-lg-2">@item.EngineType</td>
+                <td class="col-lg-1">@item.Year</td>
+                <td class="col-lg-2">
+                    @Html.ActionLink(
+                        Lang["btn_select_car"].ToString(),
+                        "SelectCar",
+                        new { engineType = item.EngineType, carId = item.CarId }
+                    )
+                </td>
+                <th class="col-lg-3" style="border:none"></th>
+            </tr>
+        }
     </table>
-</body>
-<br>
-<body>
-    <table id="myTable2" class="   col-lg-12 " style="text-align:center">
-        <tr>
-            <th class="col-lg-2">Manufacturer</th>
-            <th class="col-lg-2">Model</th>
-            <th class="col-lg-2">Engine Type</th>
-            <th class="col-lg-1">Year</th>
-            <th class="col-lg-2">Select Vehicle</th>
-            <th class="col-lg-3" style=" border:none"></th>
-        </tr>
-    </table>
-</body>
-<body onload="makeTableScroll();">
-    <div class="scrollingTable">
-        <table id="myTable" class="table  col-lg-12 ">
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td class="col-lg-2">
-                        @Html.DisplayFor(modelItem => item.Manufacturer)
-                    </td>
-                    <td class="col-lg-2">
-                        @Html.DisplayFor(modelItem => item.Model)
-                    </td>
-                    <td class="col-lg-2">
-                        @Html.DisplayFor(modelItem => item.EngineType)
-                    </td>
-                    <td class="col-lg-1">
-                        @Html.DisplayFor(modelItem => item.Year)
-                    </td>
-                    <td class="col-lg-2">
-                        @Html.ActionLink("Select Car", "SelectCar", new { engineType = item.EngineType, carId = item.CarId })
-                    </td>
-                    <th class="col-lg-3" style="border: none"></th>
-                </tr>
-            }
-        </table>
-    </div>
-</body> 
+</div>
+
+<script>
+    makeTableScroll();
+</script>

@@ -1,67 +1,50 @@
 ﻿@model CarMaint.Models.CarData
 
 @{
-    ViewBag.Title = "Details";
+    string lang = "en";
+    if (Request.Cookies["lang"] != null)
+    {
+        lang = Request.Cookies["lang"].Value;
+    }
+
+    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+    string jsonText = System.IO.File.ReadAllText(jsonPath);
+    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+
+    ViewBag.Title = Lang["car_details_title"].ToString();
 }
 
-<h2>Details</h2>
+<h2>@Lang["car_details_title"]</h2>
 
 <div>
-    <h4>Car Info</h4>
+    <h4>@Lang["car_details_info"]</h4>
     <hr />
+
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Manufacturer)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Manufacturer)
-        </dd>
+        <dt>@Lang["col_manufacturer"]</dt>
+        <dd>@Html.DisplayFor(model => model.Manufacturer)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Model)
-        </dt>
+        <dt>@Lang["col_model"]</dt>
+        <dd>@Html.DisplayFor(model => model.Model)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Model)
-        </dd>
+        <dt>@Lang["col_year"]</dt>
+        <dd>@Html.DisplayFor(model => model.Year)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
+        <dt>@Lang["col_engine_type"]</dt>
+        <dd>@Html.DisplayFor(model => model.EngineType)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Year)
-        </dd>
+        <dt>@Lang["col_mileage"]</dt>
+        <dd>@Html.DisplayFor(model => model.Mileage)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.EngineType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EngineType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Mileage)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Mileage)
-        </dd>
-
-        <dt>
-            Customer Name
-            @*@Html.DisplayNameFor(model => model.CustomerData.Name)*@
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CustomerData.Name)
-        </dd>
+        <dt>@Lang["col_customer_name"]</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerData.Name)</dd>
 
     </dl>
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CarId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(Lang["car_details_edit"].ToString(), "Edit", new { id = Model.CarId })
+    |
+    @Html.ActionLink(Lang["car_details_back"].ToString(), "Index")
 </p>

@@ -244,6 +244,7 @@
     <Compile Include="Models\MaintenanceType.cs">
       <DependentUpon>CarMaintModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MaintenanceType.Partial.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -309,6 +310,9 @@
     <Content Include="Models\BCATPDB2.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Lang\en.json" />
+    <Content Include="Lang\fr.json" />
+    <Content Include="Lang\es.json" />
     <None Include="Properties\PublishProfiles\CarMaint20170309064548 - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />

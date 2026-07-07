@@ -1,19 +1,28 @@
-﻿
-@model IEnumerable<CarMaint.Models.CustomerData>
+﻿@model IEnumerable<CarMaint.Models.CustomerData>
 
 @{
-    ViewBag.Title = "Index";
+    string lang = "en";
+    if (Request.Cookies["lang"] != null)
+    {
+        lang = Request.Cookies["lang"].Value;
+    }
+
+    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+    string jsonText = System.IO.File.ReadAllText(jsonPath);
+    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+
+    ViewBag.Title = Lang["ticket_title"].ToString();
 }
 
-<h2>Maintenance Ticket</h2>
-<h4>Select Customer</h4>
+<h2>@Lang["ticket_title"]</h2>
+<h4>@Lang["ticket_select_customer"]</h4>
 
 @using (Html.BeginForm())
 {
     <p>
         <br />
-        Find by Customer Name: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
+        @Lang["ticket_find_by_name"]: @Html.TextBox("SearchString")
+        <input type="submit" value="@Lang["ticket_search"]" />
     </p>
 }
 
@@ -22,7 +31,6 @@
         table {
             width: 90%;
             table-layout: fixed;
-            /*border-collapse: collapse;*/
         }
 
         td {
@@ -38,7 +46,6 @@
     <script type="text/javascript">
         function makeTableScroll() {
             var maxRows = 10;
-
             var table = document.getElementById('myTable');
             var wrapper = table.parentNode;
             var rowsInTable = table.rows.length;
@@ -51,74 +58,36 @@
             }
         }
     </script>
-
 </head>
 
 <body>
     <br />
     <table id="myTable2" class="table">
         <tr>
-            @*<th width="150px">
-                Id
-            </th>*@
-            <th width="150px">
-                Name
-            </th>
-            <th width="150px">
-                Address
-            </th>
-            <th width="150px">
-                City
-            </th>
-            <th width="150px">
-                Postal Code
-            </th>
-            <th width="150px">
-                Phone Number
-            </th>
-            <th width="150px">
-                Select Customer
-            </th>
-
-
+            <th>@Lang["col_name"]</th>
+            <th>@Lang["col_address"]</th>
+            <th>@Lang["col_city"]</th>
+            <th>@Lang["col_postal"]</th>
+            <th>@Lang["col_phone"]</th>
+            <th>@Lang["col_select_customer"]</th>
         </tr>
     </table>
 </body>
+
 <body onload="makeTableScroll();">
     <div class="scrollingTable">
-        <table id="myTable" class="table">          
-
+        <table id="myTable" class="table">
             @foreach (var item in Model)
             {
                 <tr>
-                    @*<td>
-                        @Html.DisplayFor(modelItem => item.CustomerId)
-                    </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Address)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PostalCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Phone)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Select", "Select", new { id = item.CustomerId })
-                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Address)</td>
+                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.City)</td>
+                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.PostalCode)</td>
+                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Phone)</td>
+                    <td style="text-align: center;">@Html.ActionLink(Lang["btn_select"].ToString(), "Select", new { id = item.CustomerId })</td>
                 </tr>
             }
-
         </table>
     </div>
 </body>
-
-
-
-

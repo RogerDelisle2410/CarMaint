@@ -24,6 +24,41 @@
             overflow: hidden;
         }
 
+        /* NAVBAR ALIGNMENT FIX */
+        .navbar-content {
+            width: 100%;
+            padding-left: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .language-select {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+            .language-select label {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                cursor: pointer;
+            }
+
+        .help-button {
+            padding: 4px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
         .navbar-brand {
             margin-left: -10px;
         }
@@ -33,26 +68,78 @@
 <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div style="width:100%; padding-left:60px;">
+        <div class="navbar-content">
 
             @{
+                // Read language cookie (C# 5 compatible)
+                string lang = "en";
+                if (Request.Cookies["lang"] != null)
+                {
+                    lang = Request.Cookies["lang"].Value;
+                }
+
+                // Load JSON file (C# 5 compatible)
+                //string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+                string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+
+                string jsonText = System.IO.File.ReadAllText(jsonPath);
+                var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+
                 var controller = ViewContext.RouteData.Values["controller"].ToString();
                 var action = ViewContext.RouteData.Values["action"].ToString();
 
                 bool isHome = controller == "Home" && action == "Index";
-                string navTitle = isHome ? "Car Maintenance Project" : "Main Menu";
+
+                // No switch expressions, no interpolation
+                string navTitle = isHome ? Lang["nav_home"].ToString() : Lang["nav_menu"].ToString();
+
+
             }
 
+            <!-- LEFT SIDE: TITLE -->
             <div class="navbar-header">
-                @Html.ActionLink(navTitle, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink(navTitle, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                <a href="/Home/Index" class="navbar-brand">@navTitle</a>
+
+            </div>
+            <div style="color:white; font-weight:bold;">
+                Controller: @controller | Action: @action
             </div>
 
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav"></ul>
+            <!-- RIGHT SIDE: LANGUAGE + HELP -->
+            <div class="nav-controls">
+
+                <div class="language-select">
+                    <label>
+                        <input type="radio" name="lang" value="en" onclick="changeLang('en')" @(lang == "en" ? "checked" : "")>
+                        <span id="label-en">English</span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="lang" value="fr" onclick="changeLang('fr')" @(lang == "fr" ? "checked" : "")>
+                        <span id="label-fr">Français</span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="lang" value="es" onclick="changeLang('es')" @(lang == "es" ? "checked" : "")>
+                        <span id="label-es">Español</span>
+                    </label>
+                </div>
+
+                <button class="help-button" onclick="showHelp()">?</button>
             </div>
 
         </div>
     </div>
+    <script>
+        function changeLang(lang) {
+            // Save language in a cookie
+            document.cookie = "lang=" + lang + "; path=/";
+
+            // Reload page so MVC can load the correct JSON file
+            location.reload();
+        }
+    </script>
 
     @if (isHome)
     {

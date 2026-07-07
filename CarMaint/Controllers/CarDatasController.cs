@@ -45,7 +45,7 @@ namespace CarMaint.Controllers
         public ActionResult Create()
         {
             ViewBag.CustomerId = new SelectList(db.CustomerDatas, "CustomerId", "Name");
-            return View();
+            return View(new CarData());
         }
 
         // POST: CarDatas/Create

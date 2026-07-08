@@ -61,11 +61,12 @@
 
     <!-- ONLY ONE POPUP -->
     <div id="helpPopup" class="hidden"
-         style="position:fixed; top:20%; left:30%; background:white; border:2px solid #333; padding:20px; z-index:9999;">
-        <h3>Help</h3>
-        <p>@Lang["help_text"]</p>
-        <button onclick="document.getElementById('helpPopup').classList.add('hidden')">Close</button>
-    </div>
+         style="position:fixed; top:20%; left:20%; background:white; border:2px solid #333; padding:20px; z-index:9999;">
+         
+         <p style="font-size:14px;">@Lang["help_title"]<p>
+         <p>@Lang["help_text"]</p>
+                <button onclick="document.getElementById('helpPopup').classList.add('hidden')">Close</button>
+</div>
 </div>
 
 

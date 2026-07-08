@@ -16,7 +16,6 @@ namespace CarMaint.Controllers
         // ---------------------------
         // LANGUAGE + TRANSLATION HELPERS
         // ---------------------------
-
         private string GetLang()
         {
             string lang = "en";
@@ -53,7 +52,6 @@ namespace CarMaint.Controllers
                 item.TaskName = item.TaskName_EN;
         }
 
-
         // ---------------------------
         // CONTROLLER ACTIONS
         // ---------------------------
@@ -78,7 +76,6 @@ namespace CarMaint.Controllers
             return View(maint);
         }
 
-
         // GET: MaintenanceTypes/Details/5
         public ActionResult Details(int? id)
         {
@@ -86,6 +83,7 @@ namespace CarMaint.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             MaintenanceType maintenanceType = db.MaintenanceTypes.Find(id);
+
             if (maintenanceType == null)
                 return HttpNotFound();
 
@@ -97,7 +95,7 @@ namespace CarMaint.Controllers
         // GET: MaintenanceTypes/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new MaintenanceType());
         }
 
         // POST: MaintenanceTypes/Create
@@ -116,31 +114,65 @@ namespace CarMaint.Controllers
         }
 
         // GET: MaintenanceTypes/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var item = db.MaintenanceTypes.Find(id);
 
-            MaintenanceType maintenanceType = db.MaintenanceTypes.Find(id);
-            if (maintenanceType == null)
+            if (item == null)
                 return HttpNotFound();
 
-            return View(maintenanceType);
+            string lang = GetLang();
+
+            switch (lang)
+            {
+                case "fr":
+                    item.TaskName = item.TaskName_FR;
+                    break;
+                case "es":
+                    item.TaskName = item.TaskName_ES;
+                    break;
+                default:
+                    item.TaskName = item.TaskName_EN;
+                    break;
+            }
+
+            return View(item);
         }
 
         // POST: MaintenanceTypes/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaintId,TaskName_EN,TaskName_FR,TaskName_ES,Cost,Gas,Diesel,Electric")] MaintenanceType maintenanceType)
+        public ActionResult Edit(MaintenanceType item)
         {
-            if (ModelState.IsValid)
+            string lang = GetLang();
+
+            var dbItem = db.MaintenanceTypes.Find(item.MaintId);
+
+            if (dbItem == null)
+                return HttpNotFound();
+
+            // Save TaskName to correct language field
+            switch (lang)
             {
-                db.Entry(maintenanceType).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                case "fr":
+                    dbItem.TaskName_FR = item.TaskName;
+                    break;
+                case "es":
+                    dbItem.TaskName_ES = item.TaskName;
+                    break;
+                default:
+                    dbItem.TaskName_EN = item.TaskName;
+                    break;
             }
 
-            return View(maintenanceType);
+            // Save other fields
+            dbItem.Cost = item.Cost;
+            dbItem.Gas = item.Gas;
+            dbItem.Diesel = item.Diesel;
+            dbItem.Electric = item.Electric;
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         // GET: MaintenanceTypes/Delete/5
@@ -150,6 +182,7 @@ namespace CarMaint.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             MaintenanceType maintenanceType = db.MaintenanceTypes.Find(id);
+
             if (maintenanceType == null)
                 return HttpNotFound();
 
@@ -164,8 +197,13 @@ namespace CarMaint.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             MaintenanceType maintenanceType = db.MaintenanceTypes.Find(id);
+
+            if (maintenanceType == null)
+                return HttpNotFound();
+
             db.MaintenanceTypes.Remove(maintenanceType);
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 

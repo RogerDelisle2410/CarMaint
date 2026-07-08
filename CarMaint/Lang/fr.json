@@ -17,7 +17,7 @@
   "col_address": "Adresse",
   "col_city": "Ville",
   "col_postal": "Code Postal",
-  "col_phone": "Numéro de Téléphone",
+  "col_phone": "Téléphone",
   "col_select_customer": "Sélectionner le Client",
 
   "btn_select": "Sélectionner",
@@ -142,6 +142,30 @@
   "car_create_title": "Créer un véhicule",
   "car_create_info": "Informations du véhicule",
   "car_create_button": "Créer",
-  "car_create_back": "Retour à la liste" 
+  "car_create_back": "Retour à la liste",
+
+  "edit": "Modifier",
+  "type_of_maintenance": "Type d’entretien",
+  "gas": "Essence",
+  "diesel": "Diesel",
+  "electric": "Électrique",
+  "save": "Enregistrer",
+  "back_to_list": "Retour à la liste",
+
+  "maintenance_history": "Historique de maintenance",
+  "car_id": "Voiture",
+  "date": "Date",
+  "cust_id": "Client",
+
+  "customer_name": "Client",
+  "car_manufacturer": "Fabricant",
+
+  "Select": "Sélectionner",
+  "Actions": "Actions",
+
+  "help_title": "Que fait cette application ?",
+  "help_text": "Cette application vous permet de gérer les voitures, les clients, les types d’entretien et l’historique de maintenance. Vous pouvez ajouter, modifier, supprimer et rechercher des enregistrements de maintenance, suivre les coûts et afficher les détails pour chaque véhicule et client."
+
+
 
 }

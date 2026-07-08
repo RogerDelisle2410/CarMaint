@@ -1,58 +1,48 @@
 ﻿@model CarMaint.Models.MaintenanceType
+@using System.IO;
 
 @{
-    ViewBag.Title = "Details";
+    string lang = "en";
+
+    if (Request.Cookies["lang"] != null)
+    {
+        lang = Request.Cookies["lang"].Value;
+    }
+
+    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+    string jsonText = System.IO.File.ReadAllText(jsonPath);
+    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+
+    ViewBag.Title = Lang["details_title"].ToString();
 }
 
-<h2>Details</h2>
+
+<h2>@Lang["details_title"]</h2>
 
 <div>
-    <h4>Type of Maintenance</h4>
+    <h4>@Lang["type_of_maintenance"]</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.TaskName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.TaskName)
-        </dd>
+        <dt>@Lang["task_name"]</dt>
+        <dd>@Html.DisplayFor(model => model.TaskName)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Cost)
-        </dt>
+        <dt>@Lang["cost"]</dt>
+        <dd>@Html.DisplayFor(model => model.Cost)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Cost)
-        </dd>
+        <dt>@Lang["gas"]</dt>
+        <dd>@Html.DisplayFor(model => model.Gas)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Gas)
-        </dt>
+        <dt>@Lang["diesel"]</dt>
+        <dd>@Html.DisplayFor(model => model.Diesel)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Gas)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Diesel)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Diesel)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Electric)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Electric)
-        </dd>
+        <dt>@Lang["electric"]</dt>
+        <dd>@Html.DisplayFor(model => model.Electric)</dd>
 
     </dl>
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.MaintId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(Lang["edit"].ToString(), "Edit", new { id = Model.MaintId }) |
+    @Html.ActionLink(Lang["back_to_list"].ToString(), "Index")
 </p>

@@ -17,7 +17,7 @@
   "col_address": "Dirección",
   "col_city": "Ciudad",
   "col_postal": "Código Postal",
-  "col_phone": "Número de Teléfono",
+  "col_phone": "Teléfono",
   "col_select_customer": "Seleccionar Cliente",
 
   "btn_select": "Seleccionar",
@@ -142,8 +142,29 @@
   "car_create_title": "Crear vehículo",
   "car_create_info": "Información del vehículo",
   "car_create_button": "Crear",
-  "car_create_back": "Volver a la lista" 
+  "car_create_back": "Volver a la lista",
 
+  "edit": "Editar",
+  "type_of_maintenance": "Tipo de mantenimiento",
+  "gas": "Gasolina",
+  "diesel": "Diésel",
+  "electric": "Eléctrico",
+  "save": "Guardar",
+  "back_to_list": "Volver a la lista",
+
+  "maintenance_history": "Historial de mantenimiento",
+  "car_id": "Auto",
+  "date": "Fecha",
+  "cust_id": "Cliente",
+
+  "customer_name": "Cliente",
+  "car_manufacturer": "Fabricante",
+
+  "Select": "Seleccionar",
+  "Actions": "Acciones  ",
+
+  "help_title": "¿Qué hace esta aplicación?",
+  "help_text": "Esta aplicación le permite gestionar autos, clientes, tipos de mantenimiento y el historial de mantenimiento. Puede agregar, editar, eliminar y buscar registros de mantenimiento, rastrear costos y ver información detallada de cada vehículo y cliente."
 
 
 }

@@ -17,7 +17,7 @@
   "col_address": "Address",
   "col_city": "City",
   "col_postal": "Postal Code",
-  "col_phone": "Phone Number",
+  "col_phone": "Phone",
   "col_select_customer": "Select Customer",
 
   "btn_select": "Select",
@@ -78,6 +78,17 @@
   "select_vehicle": "Select Vehicle",
   "select_car": "Select Car",
 
+  "select_type_of_maintenance_required": "Select the required type of maintenance",
+  "maint_id": "Maintenance ID",
+  "task_name": "Task Name",
+  "cost": "Cost",
+  "select": "Select",
+  "type": "Type",
+  "create_ticket": "Create Ticket",
+  "total": "Total:",
+  "maintenance_history_updated": "Maintenance history has been updated",
+  "ajax_error": "Error during AJAX request",
+
   "ticket_select_vehicle": "Select Vehicle to Maintain",
   "col_customer": "Customer",
   "col_engine_type": "Engine Type",
@@ -131,7 +142,29 @@
   "car_create_title": "Create Car",
   "car_create_info": "Car Info",
   "car_create_button": "Create",
-  "car_create_back": "Back to List" 
+  "car_create_back": "Back to List",
+
+  "edit": "Edit",
+  "type_of_maintenance": "Type of Maintenance",
+  "gas": "Gas",
+  "diesel": "Diesel",
+  "electric": "Electric",
+  "save": "Save",
+  "back_to_list": "Back to List",
+
+  "maintenance_history": "Maintenance History",
+  "car_id": "Car",
+  "date": "Date",
+  "cust_id": "Customer",
+
+  "customer_name": "Customer",
+  "car_manufacturer": "Manufacturer",
+
+  "Select": "Select",
+  "Actions": "Actions",
+
+  "help_title": "What does this app do?",
+  "help_text": "This application lets you manage cars, customers, maintenance types, and maintenance history. You can add, edit, delete, and search maintenance records, track costs, and view detailed information for each vehicle and customer."
 
 
 }

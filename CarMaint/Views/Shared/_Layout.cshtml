@@ -10,59 +10,103 @@
     @Scripts.Render("~/bundles/jquery")
     @RenderSection("scripts", required: false)
 
-    <style>
-        .body-wrapper {
-            padding: 5px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+<style>
+    .body-wrapper {
+        padding: 5px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-        .home-fullscreen {
-            padding: 0 !important;
-            margin: 0 !important;
-            height: calc(85vh - 50px);
-            overflow: hidden;
-        }
+    .home-fullscreen {
+        padding: 0 !important;
+        margin: 0 !important;
+        height: calc(85vh - 50px);
+        overflow: hidden;
+    }
 
-        /* NAVBAR ALIGNMENT FIX */
-        .navbar-content {
-            width: 100%;
-            padding-left: 60px;
+    /* NAVBAR ALIGNMENT FIX */
+    .navbar-content {
+        width: 100%;
+        padding-left: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .language-select {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+        .language-select label {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-        }
-
-        .language-select {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-            .language-select label {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                cursor: pointer;
-            }
-
-        .help-button {
-            padding: 4px 10px;
-            font-size: 16px;
+            gap: 5px;
             cursor: pointer;
-            margin-left: 20px;
         }
 
-        .nav-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+    .help-button {
+        background-color: #007bff; /* Bootstrap blue */
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: none;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 35px;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+        .help-button:hover {
+            background-color: #0069d9; /* darker blue */
         }
 
-        .navbar-brand {
-            margin-left: -10px;
-        }
-    </style>
+    .help-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.6);
+        z-index: 9998;
+    }
+
+    .help-content {
+        background: white;
+        width: 400px;
+        padding: 20px;
+        margin: 150px auto;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .close-help {
+        margin-top: 15px;
+        padding: 8px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+
+    .nav-controls {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-right: 50px;
+    }
+
+    .navbar-brand {
+        margin-left: -10px;
+    }
+</style>
 </head>
 
 <body>
@@ -127,6 +171,14 @@
                 </div>
 
                 <button class="help-button" onclick="showHelp()">?</button>
+
+                <div id="helpModal" class="help-modal">
+                    <div class="help-content">
+                        <h3 id="helpTitle"></h3>
+                        <p id="helpText"></p>
+                        <button class="close-help" onclick="closeHelp()">OK</button>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -140,6 +192,33 @@
             location.reload();
         }
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            window.showHelp = function () {
+                let modal = document.getElementById("helpModal");
+                if (!modal) return;
+
+                let lang = document.cookie.replace(/(?:(?:^|.*;\s*)lang\s*\=\s*([^;]*).*$)|^.*$/, "$1") || "en";
+
+                fetch(`/Lang/${lang}.json`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("helpTitle").innerText = data.help_title;
+                        document.getElementById("helpText").innerText = data.help_text;
+                        modal.style.display = "block";
+                    });
+            };
+
+            window.closeHelp = function () {
+                let modal = document.getElementById("helpModal");
+                if (!modal) return;
+                modal.style.display = "none";
+            };
+
+        });
+    </script>
+
 
     @if (isHome)
     {

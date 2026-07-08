@@ -30,8 +30,9 @@
 
 <style type="text/css">
     table {
-        width: 90%;
+        width: 97%;
         table-layout: fixed;
+        align-content: center;
     }
 
     td {
@@ -39,7 +40,7 @@
     }
 
     .scrollingTable {
-        width: 1150px;
+        width: 1200px;
         overflow-y: auto;
     }
 </style>
@@ -65,12 +66,12 @@
         <table id="myTable" class="table">
             <tr>
                 <th>@Lang["col_name"]</th>
-                <th>@Lang["col_address"]</th>
-                <th>@Lang["col_city"]</th>
-                <th>@Lang["col_postal"]</th>
-                <th>@Lang["col_phone"]</th>
-                <th>Select</th>
-                <th>Actions</th>
+                <th width="200px">@Lang["col_address"]</th>
+                <th width="150px">@Lang["col_city"]</th>
+                <th width="100px">@Lang["col_postal"]</th>
+                <th width="150px">@Lang["col_phone"]</th>
+                <th width="100px">@Lang["Select"]</th>
+                <th>@Lang["Actions"]</th>
             </tr>
 
             @foreach (var item in Model)

@@ -89,8 +89,9 @@
 
                         <td style="text-align: center;">
                             @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.HistoryId }) |
-                            @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.HistoryId }) |
-                            @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.HistoryId })
+                            @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.HistoryId })
+                            @*|
+                            @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.HistoryId })*@
                         </td>
                     </tr>
                 }

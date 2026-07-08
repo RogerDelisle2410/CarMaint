@@ -1,65 +1,53 @@
 ﻿@model CarMaint.Models.MaintenanceType
+@using System.IO;
 
 @{
-    ViewBag.Title = "Delete";
+    string lang = "en";
+    if (Request.Cookies["lang"] != null)
+    {
+        lang = Request.Cookies["lang"].Value;
+    }
+
+    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+    string jsonText = System.IO.File.ReadAllText(jsonPath);
+    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+
+    ViewBag.Title = Lang["delete_title"].ToString();
 }
 
-<h2>Delete</h2>
+<h2>@Lang["delete_title"]</h2>
+<h3>@Lang["delete_confirm"]</h3>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Type of Maintenance</h4>
+    <h4>@Lang["type_of_maintenance"]</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.TaskName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.TaskName)
-        </dd>
+        <dt>@Lang["task_name"]</dt>
+        <dd>@Html.DisplayFor(model => model.TaskName)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Cost)
-        </dt>
+        <dt>@Lang["cost"]</dt>
+        <dd>@Html.DisplayFor(model => model.Cost)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Cost)
+        <dt>@Lang["gas"]</dt>
+        <dd>@Html.DisplayFor(model => model.Gas)</dd>
 
-        </dd>
+        <dt>@Lang["diesel"]</dt>
+        <dd>@Html.DisplayFor(model => model.Diesel)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Gas)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Gas)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Diesel)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Diesel)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Electric)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Electric)
-        </dd>
+        <dt>@Lang["electric"]</dt>
+        <dd>@Html.DisplayFor(model => model.Electric)</dd>
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="@Lang["delete_button"]" class="btn btn-default" />
+            |
+            @Html.ActionLink(Lang["back_to_list"].ToString(), "Index")
         </div>
     }
 </div>

@@ -1,5 +1,7 @@
 ﻿@model CarMaint.Models.CarData
 
+@using Newtonsoft.Json.Linq
+
 @{
     string lang = "en";
     if (Request.Cookies["lang"] != null)
@@ -7,12 +9,23 @@
         lang = Request.Cookies["lang"].Value;
     }
 
-    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
-    string jsonText = System.IO.File.ReadAllText(jsonPath);
-    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+    JObject Lang;
 
-    ViewBag.Title = Lang["car_details_title"].ToString();
+    try
+    {
+        string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+        string jsonText = System.IO.File.ReadAllText(jsonPath);
+        Lang = JObject.Parse(jsonText);
+    }
+    catch
+    {
+        // Fallback to English if Azure can't find the file
+        string fallbackPath = Server.MapPath("~/Lang/en.json");
+        string fallbackText = System.IO.File.ReadAllText(fallbackPath);
+        Lang = JObject.Parse(fallbackText);
+    }
 }
+
 
 <h2>@Lang["car_details_title"]</h2>
 

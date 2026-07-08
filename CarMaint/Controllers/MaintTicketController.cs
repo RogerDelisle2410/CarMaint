@@ -69,7 +69,7 @@ namespace CarMaint.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                customer = customer.Where(s => s.Name.Contains(searchString));
+                customer = customer.Where(s => s.Name.ToLower().Contains(searchString.ToLower()));
             }
 
             return View(customer.ToList().OrderBy(t => t.Name));

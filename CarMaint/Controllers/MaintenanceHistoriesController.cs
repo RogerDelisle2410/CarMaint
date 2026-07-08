@@ -75,7 +75,7 @@ namespace CarMaint.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 histories = histories
-                    .Where(s => s.CustomerData.Name.Contains(searchString))
+                    .Where(s => s.CustomerData.Name.ToLower().Contains(searchString.ToLower()))
                     .ToList();
             }
 

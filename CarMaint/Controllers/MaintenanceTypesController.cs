@@ -67,7 +67,7 @@ namespace CarMaint.Controllers
             // Filter AFTER translation
             if (!String.IsNullOrEmpty(SearchString))
             {
-                maint = maint.Where(m => m.TaskName.Contains(SearchString)).ToList();
+                maint = maint.Where(m => m.TaskName.ToLower().Contains(SearchString.ToLower())).ToList();
             }
 
             // Sort AFTER translation

@@ -21,7 +21,7 @@ namespace CarMaint.Controllers
                                select s;
             if (!String.IsNullOrEmpty(searchString))
             {
-                carData = carData.Where(s => s.Manufacturer.Contains(searchString));
+                carData = carData.Where(s => s.Manufacturer.ToLower().Contains(searchString.ToLower()));
             }
             return View(carData.ToList().OrderBy(t => t.Manufacturer));
         }

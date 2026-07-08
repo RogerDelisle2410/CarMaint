@@ -1,6 +1,8 @@
 ﻿@model CarMaint.Models.MaintenanceHistory
 @using System.IO;
 
+@using Newtonsoft.Json.Linq
+
 @{
     string lang = "en";
     if (Request.Cookies["lang"] != null)
@@ -8,12 +10,23 @@
         lang = Request.Cookies["lang"].Value;
     }
 
-    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
-    string jsonText = System.IO.File.ReadAllText(jsonPath);
-    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+    JObject Lang;
 
-    ViewBag.Title = Lang["edit_title"].ToString();
+    try
+    {
+        string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+        string jsonText = System.IO.File.ReadAllText(jsonPath);
+        Lang = JObject.Parse(jsonText);
+    }
+    catch
+    {
+        // Fallback to English if Azure can't find the file
+        string fallbackPath = Server.MapPath("~/Lang/en.json");
+        string fallbackText = System.IO.File.ReadAllText(fallbackPath);
+        Lang = JObject.Parse(fallbackText);
+    }
 }
+
 
 <h2>@Lang["edit_title"]</h2>
 
@@ -21,59 +34,59 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>@Lang["maintenance_history"]</h4>
-    <hr />
+    <div class="form-horizontal">
+        <h4>@Lang["maintenance_history"]</h4>
+        <hr />
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.HistoryId)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.HistoryId)
 
-    <div class="form-group">
-        @Html.Label(Lang["car_id"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("CarId", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CarId, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label(Lang["car_id"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CarId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CarId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(Lang["task_name"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("MaintId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MaintId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(Lang["date"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(Lang["cust_id"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CustId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(Lang["cost"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="@Lang["save"]" class="btn btn-default" />
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.Label(Lang["task_name"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("MaintId", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.MaintId, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label(Lang["date"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label(Lang["cust_id"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("CustId", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CustId, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label(Lang["cost"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="@Lang["save"]" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 
 <div>

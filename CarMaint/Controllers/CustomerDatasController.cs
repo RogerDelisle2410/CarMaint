@@ -22,7 +22,7 @@ namespace CarMaint.Controllers
                             select s;
             if (!String.IsNullOrEmpty(searchString))
             {
-                customerData = customerData.Where(s => s.Name.Contains(searchString));
+                customerData = customerData.Where(s => s.Name.ToLower().Contains(searchString.ToLower()));
             }
             return View(customerData.ToList().OrderBy(t => t.Name));
         }

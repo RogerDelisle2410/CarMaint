@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<CarMaint.Models.MaintenanceType>
 
+@using Newtonsoft.Json.Linq
+
+@using Newtonsoft.Json.Linq
+
 @{
     string lang = "en";
     if (Request.Cookies["lang"] != null)
@@ -7,12 +11,24 @@
         lang = Request.Cookies["lang"].Value;
     }
 
-    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
-    string jsonText = System.IO.File.ReadAllText(jsonPath);
-    var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
+    JObject Lang;
 
-    ViewBag.Title = Lang["maint_title"].ToString();
+    try
+    {
+        string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+        string jsonText = System.IO.File.ReadAllText(jsonPath);
+        Lang = JObject.Parse(jsonText);
+    }
+    catch
+    {
+        // Fallback to English if Azure can't find the file
+        string fallbackPath = Server.MapPath("~/Lang/en.json");
+        string fallbackText = System.IO.File.ReadAllText(fallbackPath);
+        Lang = JObject.Parse(fallbackText);
+    }
 }
+
+
 
 <h2>@Lang["maint_title"]</h2>
 
@@ -90,9 +106,9 @@
 
                     <td style="text-align: center;">
                         @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.MaintId }) |
-                        @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.MaintId }) 
+                        @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.MaintId })
                         @*|
-                        @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.MaintId })*@
+                            @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.MaintId })*@
                     </td>
                 </tr>
             }

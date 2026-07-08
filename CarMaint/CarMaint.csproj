@@ -269,7 +269,9 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Image\CrappyTire.png" />
+    <Content Include="Image\Crappy_Tire_en.png" />
+    <Content Include="Image\Crappy_Tire_es.png" />
+    <Content Include="Image\Crappy_Tire_fr.png" />
     <Content Include="Models\CarMaintModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>CarMaintModel.edmx</DependentUpon>

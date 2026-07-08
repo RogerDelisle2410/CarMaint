@@ -1,44 +1,4 @@
-﻿@*@{
-        ViewBag.Title = "Home Page";
-    }
-
-    @{
-        // Load JSON FIRST
-        string lang = "en";
-        if (Request.Cookies["lang"] != null)
-        {
-            lang = Request.Cookies["lang"].Value;
-        }
-
-        string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
-        string jsonText = System.IO.File.ReadAllText(jsonPath);
-        var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
-    }
-
-    <div class="home-fullscreen">
-        <div style="display:flex; height:100%; overflow:hidden; align-items:flex-start;">
-            <div style="width:25%; background:white; padding:30px; font-weight:bold; font-size:14px; line-height:1.8; box-shadow:0 0 15px rgba(0,0,0,0.15); border-radius:10px; margin-left:20px; margin-top:20px; ">
-
-                @Html.ActionLink(Lang["menu_new_ticket"].ToString(), "Index", "MaintTicket")<br /><br />
-                @Html.ActionLink(Lang["menu_customer_info"].ToString(), "Index", "CustomerDatas")<br /><br />
-                @Html.ActionLink(Lang["menu_car_info"].ToString(), "Index", "CarDatas")<br /><br />
-                @Html.ActionLink(Lang["menu_maint_type"].ToString(), "Index", "MaintenanceTypes")<br /><br />
-                @Html.ActionLink(Lang["menu_maint_history"].ToString(), "Index", "MaintenanceHistories")<br /><br />
-
-            </div>
-
-            <div style=" width:75%; display:flex; justify-content:center; align-items:flex-start; padding-left:40px; padding-top:20px; ">
-                <img src="~/Image/CrappyTire.png" alt="Crappy Tire" style="max-width:90%; height:80%;" />
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function showHelp() {
-            document.getElementById("helpPopup").classList.remove("hidden");
-        }
-    </script>*@
-
+﻿
 @{
     ViewBag.Title = "Home Page";
 }

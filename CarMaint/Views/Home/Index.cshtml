@@ -56,26 +56,21 @@
         </div>
     </div>
 
-    <!-- ⭐ Help button MUST be inside home-fullscreen -->
+    <!-- ONLY ONE HELP BUTTON -->
     <button id="helpBtn" style="margin-left:20px;">?</button>
 
-    <!-- ⭐ Popup MUST be inside home-fullscreen -->
+    <!-- ONLY ONE POPUP -->
     <div id="helpPopup" class="hidden"
          style="position:fixed; top:20%; left:30%; background:white; border:2px solid #333; padding:20px; z-index:9999;">
         <h3>Help</h3>
-        <p>This is your help content.</p>
+        <p>@Lang["help_text"]</p>
         <button onclick="document.getElementById('helpPopup').classList.add('hidden')">Close</button>
     </div>
 </div>
 
 
-<button id="helpBtn" style="margin-left:20px;">?</button>
 
-<div id="helpPopup" class="hidden" style="position:fixed; top:20%; left:30%; background:white; border:2px solid #333; padding:20px; z-index:9999;">
-    <h3>Help</h3>
-    <p>This is your help content.</p>
-    <button onclick="document.getElementById('helpPopup').classList.add('hidden')">Close</button>
-</div>
+
 
 <style>
     .hidden {

@@ -124,7 +124,8 @@
 
                 // Load JSON file (C# 5 compatible)
                 //string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
-                string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+                //string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lang", lang + ".json");
+                string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
 
                 string jsonText = System.IO.File.ReadAllText(jsonPath);
                 var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);

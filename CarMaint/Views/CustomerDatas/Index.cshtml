@@ -36,10 +36,17 @@
         <input type="submit" value="@Lang["cust_search"]" />
     </p>
 }
-
 <p>
-    @Html.ActionLink(Lang["cust_create_new"].ToString(), "Create")
+    @Html.ActionLink(
+        Lang["cust_create_new"].ToString(),
+        "Create",
+        null,
+        new { @class = "btn-menu" }
+    )
 </p>
+@*<p>
+    @Html.ActionLink(Lang["cust_create_new"].ToString(), "Create")
+</p>*@
 
 <style type="text/css">
     table {
@@ -56,6 +63,25 @@
         width: 1200px;
         overflow-y: auto;
     }
+    .btn-menu {
+        display: inline-block;
+        padding: 6px 12px; /* smaller padding */
+        background: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 4px; /* slightly smaller radius */
+        font-weight: bold;
+        font-size: 12px; /* smaller text */
+        color: #333;
+        text-decoration: none;
+        transition: 0.15s ease-in-out;
+    }
+
+        .btn-menu:hover {
+            background: #e6e6e6;
+            border-color: #999;
+            cursor: pointer;
+        }
+
 </style>
 
 <script type="text/javascript">

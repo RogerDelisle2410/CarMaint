@@ -59,11 +59,19 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
+        <div class="form-actions no-color" style="display:flex; gap:12px;">
 
-        <div class="form-actions no-color">
-            <input type="submit" value="@Lang["car_delete_button"]" class="btn btn-default" />
-            |
-            @Html.ActionLink(Lang["car_delete_back"].ToString(), "Index")
-        </div>
+            <button type="submit" class="btn btn-danger">
+                @Lang["car_delete_button"]
+            </button>
+
+            @Html.ActionLink(
+                Lang["car_delete_back"].ToString(),
+                "Index",
+                null,
+                new { @class = "btn btn-secondary" }
+            )
+
+        </div> 
     }
 </div>

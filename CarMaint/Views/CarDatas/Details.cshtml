@@ -55,9 +55,20 @@
 
     </dl>
 </div>
+<div style="display:flex; gap:12px;">
 
-<p>
-    @Html.ActionLink(Lang["car_details_edit"].ToString(), "Edit", new { id = Model.CarId })
-    |
-    @Html.ActionLink(Lang["car_details_back"].ToString(), "Index")
-</p>
+    @Html.ActionLink(
+        Lang["car_details_edit"].ToString(),
+        "Edit",
+        new { id = Model.CarId },
+        new { @class = "btn btn-primary" }
+    )
+
+    @Html.ActionLink(
+        Lang["car_details_back"].ToString(),
+        "Index",
+        null,
+        new { @class = "btn btn-secondary" }
+    )
+
+</div> 

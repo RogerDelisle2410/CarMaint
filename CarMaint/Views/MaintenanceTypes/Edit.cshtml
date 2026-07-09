@@ -3,28 +3,45 @@
 
 @using Newtonsoft.Json.Linq
 
+@*@{
+        string lang = "en";
+        if (Request.Cookies["lang"] != null)
+        {
+            lang = Request.Cookies["lang"].Value;
+        }
+
+        JObject Lang;
+
+        try
+        {
+            string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+            string jsonText = System.IO.File.ReadAllText(jsonPath);
+            Lang = JObject.Parse(jsonText);
+        }
+        catch
+        {
+            // Fallback to English if Azure can't find the file
+            string fallbackPath = Server.MapPath("~/Lang/en.json");
+            string fallbackText = System.IO.File.ReadAllText(fallbackPath);
+            Lang = JObject.Parse(fallbackText);
+        }
+    }*@
 @{
+    // Load selected language
     string lang = "en";
     if (Request.Cookies["lang"] != null)
     {
         lang = Request.Cookies["lang"].Value;
     }
 
-    JObject Lang;
+    JObject LangEN = JObject.Parse(System.IO.File.ReadAllText(Server.MapPath("~/Lang/en.json")));
+    JObject LangFR = JObject.Parse(System.IO.File.ReadAllText(Server.MapPath("~/Lang/fr.json")));
+    JObject LangES = JObject.Parse(System.IO.File.ReadAllText(Server.MapPath("~/Lang/es.json")));
 
-    try
-    {
-        string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
-        string jsonText = System.IO.File.ReadAllText(jsonPath);
-        Lang = JObject.Parse(jsonText);
-    }
-    catch
-    {
-        // Fallback to English if Azure can't find the file
-        string fallbackPath = Server.MapPath("~/Lang/en.json");
-        string fallbackText = System.IO.File.ReadAllText(fallbackPath);
-        Lang = JObject.Parse(fallbackText);
-    }
+    // The active language (for labels)
+    JObject Lang = lang == "fr" ? LangFR :
+                   lang == "es" ? LangES :
+                   LangEN;
 }
 
 
@@ -34,70 +51,92 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>@Lang["type_of_maintenance"]</h4>
-        <hr />
+<div class="form-horizontal">
+    <h4>@Lang["type_of_maintenance"]</h4>
+    <hr />
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.MaintId)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.MaintId)
 
-        <div class="form-group">
-            @Html.Label(Lang["task_name"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TaskName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TaskName, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        <label class="control-label col-md-2">@Lang["task_name"]</label>
+
+        <div class="col-md-10">
+
+            <!-- English -->
+            <label><strong>EN:</strong></label>
+            @Html.TextBoxFor(model => model.TaskName_EN, new { @class = "form-control" })
+
+            <!-- French -->
+            <label><strong>FR:</strong></label>
+            @Html.TextBoxFor(model => model.TaskName_FR, new { @class = "form-control" })
+
+            <!-- Spanish -->
+            <label><strong>ES:</strong></label>
+            @Html.TextBoxFor(model => model.TaskName_ES, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(model => model.TaskName_EN, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.TaskName_FR, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.TaskName_ES, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.Label(Lang["cost"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
-            </div>
+
+    <div class="form-group">
+        @Html.Label(Lang["cost"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.Label(Lang["gas"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Gas)
-                    @Html.ValidationMessageFor(model => model.Gas, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label(Lang["diesel"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Diesel)
-                    @Html.ValidationMessageFor(model => model.Diesel, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label(Lang["electric"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Electric)
-                    @Html.ValidationMessageFor(model => model.Electric, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="@Lang["edit_save"]" class="btn btn-default" />
+    <div class="form-group">
+        @Html.Label(Lang["gas"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Gas)
+                @Html.ValidationMessageFor(model => model.Gas, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>
-}
 
-<div>
-    @Html.ActionLink(Lang["edit_back_to_list"].ToString(), "Index")
+    <div class="form-group">
+        @Html.Label(Lang["diesel"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Diesel)
+                @Html.ValidationMessageFor(model => model.Diesel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label(Lang["electric"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Electric)
+                @Html.ValidationMessageFor(model => model.Electric, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10" style="display:flex; gap:12px;">
+
+            <button type="submit" class="btn btn-primary">
+                @Lang["edit_save"]
+            </button>
+
+            @Html.ActionLink(
+                Lang["edit_back_to_list"].ToString(),
+                "Index",
+                null,
+                new { @class = "btn btn-secondary" }
+            )
+
+        </div>
+    </div>
 </div>
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

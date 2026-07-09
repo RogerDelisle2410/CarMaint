@@ -8,8 +8,8 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    <script src="~/Scripts/help.js"></script> 
-    
+    <script src="~/Scripts/help.js"></script>
+
     @RenderSection("scripts", required: false)
 
     <style>
@@ -61,6 +61,8 @@
             line-height: 35px;
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            margin-right: 20px;
+            margin-left: 25px;
         }
 
             .help-button:hover {
@@ -111,8 +113,6 @@
                 margin-right: auto;
             }
 
-
-
         .close-help {
             margin-top: 15px;
             padding: 8px 20px;
@@ -134,52 +134,65 @@
         .navbar-brand {
             margin-left: -10px;
         }
+
+        .navbar-title {
+            color: black !important;
+            font-size: 26px; /* bigger */
+            font-weight: bold;
+            text-decoration: none;
+            cursor: default; /* not clickable */
+            display: inline-block;
+            margin: 0 auto;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-content">
 
-            @{
-                // Read language cookie (C# 5 compatible)
-                string lang = "en";
-                if (Request.Cookies["lang"] != null)
-                {
-                    lang = Request.Cookies["lang"].Value;
-                }
-
-                string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
-
-                string jsonText = System.IO.File.ReadAllText(jsonPath);
-                var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
-
-                var controller = ViewContext.RouteData.Values["controller"].ToString();
-                var action = ViewContext.RouteData.Values["action"].ToString();
-
-                bool isHome = controller == "Home" && action == "Index";
-
-                // No switch expressions, no interpolation
-                string navTitle = isHome ? Lang["nav_home"].ToString() : Lang["nav_menu"].ToString();
-
-
+        @{
+            string lang = "en";
+            if (Request.Cookies["lang"] != null)
+            {
+                lang = Request.Cookies["lang"].Value;
             }
 
-            <!-- LEFT SIDE: TITLE -->
-            <div class="navbar-header">
-                @*@Html.ActionLink(navTitle, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
-                <a href="/Home/Index" class="navbar-brand">@navTitle</a>
+            string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+            string jsonText = System.IO.File.ReadAllText(jsonPath);
+            var Lang = Newtonsoft.Json.Linq.JObject.Parse(jsonText);
 
+            var controller = ViewContext.RouteData.Values["controller"].ToString();
+            var action = ViewContext.RouteData.Values["action"].ToString();
+            bool isHome = controller == "Home" && action == "Index";
+
+            string navTitle = Lang["nav_home"].ToString();   // Car Maintenance Project
+        }
+
+        @* ============================
+            ONE ROW: LEFT / CENTER / RIGHT
+            ============================ *@
+        <div style="width:100%; display:flex; align-items:center; padding:10px 20px;">
+
+            @* LEFT: Main Menu button (not on Home) *@
+            <div style="flex:1; text-align:left; padding-left:50px;">
+                @if (!isHome)
+                {
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">
+                        @Lang["nav_menu"]
+                    </a>
+                }
             </div>
-            <div style="color:white; font-weight:bold;">
-                Controller: @controller | Action: @action
+
+            @* CENTER: Title *@
+            <div style="flex:1; text-align:center;">
+                <span class="navbar-title">@navTitle</span>
             </div>
 
-            <!-- RIGHT SIDE: LANGUAGE + HELP -->
-            <div class="nav-controls">
+            @* RIGHT: Language + Help *@
+            <div style="flex:1; text-align:right;">
+                <div class="language-select" style="display:inline-flex; gap:15px;">
 
-                <div class="language-select">
                     <label>
                         <input type="radio" name="lang" value="en" onclick="changeLang('en')" @(lang == "en" ? "checked" : "")>
                         <span id="label-en">English</span>
@@ -194,21 +207,25 @@
                         <input type="radio" name="lang" value="es" onclick="changeLang('es')" @(lang == "es" ? "checked" : "")>
                         <span id="label-es">Español</span>
                     </label>
+
                 </div>
 
                 <button class="help-button" onclick="showHelp()">?</button>
-
-                <div id="helpModal" class="help-modal">
-                    <div class="help-content">
-                        <h3 id="helpTitle"></h3>
-                        <p id="helpText"></p>
-                        <button class="close-help" onclick="closeHelp()">OK</button>
-                    </div>
-                </div>
             </div>
 
         </div>
+
     </div>
+    <div id="helpModal" class="help-modal">
+        <div class="help-content">
+            <h3 id="helpTitle"></h3>
+            <p id="helpText"></p>
+            <button class="close-help" onclick="closeHelp()">OK</button>
+        </div>
+    </div>
+
+
+
     <script>
         function changeLang(lang) {
             // Save language in a cookie
@@ -229,7 +246,7 @@
         <div class="body-wrapper">
             @RenderBody()
         </div>
-    } 
+    }
 
 </body>
 </html>

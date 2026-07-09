@@ -53,8 +53,20 @@
 
     </dl>
 </div>
+<div style="display:flex; gap:12px;">
 
-<p>
-    @Html.ActionLink(Lang["edit"].ToString(), "Edit", new { id = Model.MaintId }) |
-    @Html.ActionLink(Lang["back_to_list"].ToString(), "Index")
-</p>
+    @Html.ActionLink(
+        Lang["edit"].ToString(),
+        "Edit",
+        new { id = Model.MaintId },
+        new { @class = "btn btn-primary" }
+    )
+
+    @Html.ActionLink(
+        Lang["back_to_list"].ToString(),
+        "Index",
+        null,
+        new { @class = "btn btn-secondary" }
+    )
+
+</div> 

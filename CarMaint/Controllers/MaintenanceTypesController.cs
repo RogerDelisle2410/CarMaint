@@ -14,7 +14,7 @@ namespace CarMaint.Controllers
         private readonly BCATPEntities1 db = new BCATPEntities1();
 
         // ---------------------------
-        // LANGUAGE + TRANSLATION HELPERS
+        // LANGUAGE HELPER
         // ---------------------------
         private string GetLang()
         {
@@ -61,16 +61,13 @@ namespace CarMaint.Controllers
         {
             var maint = db.MaintenanceTypes.ToList();
 
-            // Translate first
             ApplyTaskNameTranslation(maint);
 
-            // Filter AFTER translation
             if (!String.IsNullOrEmpty(SearchString))
             {
                 maint = maint.Where(m => m.TaskName.ToLower().Contains(SearchString.ToLower())).ToList();
             }
 
-            // Sort AFTER translation
             maint = maint.OrderBy(m => m.TaskName).ToList();
 
             return View(maint);
@@ -105,8 +102,10 @@ namespace CarMaint.Controllers
         {
             if (ModelState.IsValid)
             {
+                // No auto-translation. You enter EN, FR, ES manually.
                 db.MaintenanceTypes.Add(maintenanceType);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
@@ -121,50 +120,23 @@ namespace CarMaint.Controllers
             if (item == null)
                 return HttpNotFound();
 
-            string lang = GetLang();
-
-            switch (lang)
-            {
-                case "fr":
-                    item.TaskName = item.TaskName_FR;
-                    break;
-                case "es":
-                    item.TaskName = item.TaskName_ES;
-                    break;
-                default:
-                    item.TaskName = item.TaskName_EN;
-                    break;
-            }
-
-            return View(item);
+            return View(item); // Show EN/FR/ES fields directly
         }
 
         // POST: MaintenanceTypes/Edit/5
         [HttpPost]
         public ActionResult Edit(MaintenanceType item)
         {
-            string lang = GetLang();
-
             var dbItem = db.MaintenanceTypes.Find(item.MaintId);
 
             if (dbItem == null)
                 return HttpNotFound();
 
-            // Save TaskName to correct language field
-            switch (lang)
-            {
-                case "fr":
-                    dbItem.TaskName_FR = item.TaskName;
-                    break;
-                case "es":
-                    dbItem.TaskName_ES = item.TaskName;
-                    break;
-                default:
-                    dbItem.TaskName_EN = item.TaskName;
-                    break;
-            }
+            // Save all languages directly
+            dbItem.TaskName_EN = item.TaskName_EN;
+            dbItem.TaskName_FR = item.TaskName_FR;
+            dbItem.TaskName_ES = item.TaskName_ES;
 
-            // Save other fields
             dbItem.Cost = item.Cost;
             dbItem.Gas = item.Gas;
             dbItem.Diesel = item.Diesel;

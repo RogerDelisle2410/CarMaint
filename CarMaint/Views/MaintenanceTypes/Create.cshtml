@@ -34,69 +34,92 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>@Lang["type_of_maintenance"]</h4>
-        <hr />
+<div class="form-horizontal">
+    <h4>@Lang["type_of_maintenance"]</h4>
+    <hr />
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.Label(Lang["task_name"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TaskName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TaskName, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.Label("English Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.TaskName_EN, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TaskName_EN, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.Label(Lang["cost"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.Label("French Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.TaskName_FR, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TaskName_FR, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.Label(Lang["gas"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Gas)
-                    @Html.ValidationMessageFor(model => model.Gas, "", new { @class = "text-danger" })
-                </div>
-            </div>
+    <div class="form-group">
+        @Html.Label("Spanish Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.TaskName_ES, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TaskName_ES, "", new { @class = "text-danger" })
         </div>
+    </div> 
 
-        <div class="form-group">
-            @Html.Label(Lang["diesel"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Diesel)
-                    @Html.ValidationMessageFor(model => model.Diesel, "", new { @class = "text-danger" })
-                </div>
-            </div>
+    <div class="form-group">
+        @Html.Label(Lang["cost"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.Label(Lang["electric"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Electric)
-                    @Html.ValidationMessageFor(model => model.Electric, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="@Lang["create_button"]" class="btn btn-default" />
+    <div class="form-group">
+        @Html.Label(Lang["gas"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Gas)
+                @Html.ValidationMessageFor(model => model.Gas, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>
-}
 
-<div>
-    @Html.ActionLink(Lang["back_to_list"].ToString(), "Index")
+    <div class="form-group">
+        @Html.Label(Lang["diesel"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Diesel)
+                @Html.ValidationMessageFor(model => model.Diesel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label(Lang["electric"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Electric)
+                @Html.ValidationMessageFor(model => model.Electric, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" style="margin-top:25px;">
+        <div class="col-md-offset-2 col-md-10" style="display:flex; gap:12px;">
+
+            <input type="submit"
+                   value="@Lang["create_button"]"
+                   class="btn btn-primary" />
+
+            @Html.ActionLink(
+                Lang["back_to_list"].ToString(),
+                "Index",
+                null,
+                new { @class = "btn btn-secondary" }
+            )
+
+        </div>
+    </div> 
 </div>
+} 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

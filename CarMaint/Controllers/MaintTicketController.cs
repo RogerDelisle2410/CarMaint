@@ -42,20 +42,7 @@ namespace CarMaint.Controllers
                 else
                     m.TaskName = m.TaskName_EN;
             }
-        }
-
-        private void ApplyTaskNameTranslation(MaintenanceType item)
-        {
-            string lang = GetLang();
-
-            if (lang == "fr")
-                item.TaskName = item.TaskName_FR;
-            else if (lang == "es")
-                item.TaskName = item.TaskName_ES;
-            else
-                item.TaskName = item.TaskName_EN;
-        }
-
+        } 
 
         // ---------------------------
         // CONTROLLER ACTIONS

@@ -1,7 +1,10 @@
 ﻿{
-  "nav_home": "Proyecto de mantenimiento del automóvil",
+  "nav_home": "Mantenimiento de autos",
   "nav_menu": "Menú Principal",
-
+  "select": "Seleccionar",
+  "English Name": "Nombre en inglés",
+  "French Name": "Nombre en francés",
+  "Spanish Name": "Nombre en español",
   "menu_new_ticket": "Nuevo Ticket de Mantenimiento",
   "menu_customer_info": "Información del Cliente",
   "menu_car_info": "Información del Auto",

@@ -1,4 +1,4 @@
-﻿@model CarMaint.Models.CustomerData
+﻿@model CarMaint.Models.CustomerDetailsViewModel
 
 @using Newtonsoft.Json.Linq
 
@@ -19,13 +19,11 @@
     }
     catch
     {
-        // Fallback to English if Azure can't find the file
         string fallbackPath = Server.MapPath("~/Lang/en.json");
         string fallbackText = System.IO.File.ReadAllText(fallbackPath);
         Lang = JObject.Parse(fallbackText);
     }
 }
-
 
 <h2>@Lang["details_title"]</h2>
 
@@ -36,27 +34,60 @@
     <dl class="dl-horizontal">
 
         <dt>@Lang["col_name"]</dt>
-        <dd>@Html.DisplayFor(model => model.Name)</dd>
+        <dd>@Html.DisplayFor(model => model.Customer.Name)</dd>
 
         <dt>@Lang["col_address"]</dt>
-        <dd>@Html.DisplayFor(model => model.Address)</dd>
+        <dd>@Html.DisplayFor(model => model.Customer.Address)</dd>
 
         <dt>@Lang["col_city"]</dt>
-        <dd>@Html.DisplayFor(model => model.City)</dd>
+        <dd>@Html.DisplayFor(model => model.Customer.City)</dd>
 
         <dt>@Lang["col_postal"]</dt>
-        <dd>@Html.DisplayFor(model => model.PostalCode)</dd>
+        <dd>@Html.DisplayFor(model => model.Customer.PostalCode)</dd>
 
         <dt>@Lang["col_phone"]</dt>
-        <dd>@Html.DisplayFor(model => model.Phone)</dd>
+        <dd>@Html.DisplayFor(model => model.Customer.Phone)</dd>
 
     </dl>
 </div>
+
+<h4>@Lang["details_customer_cars"]</h4>
+<hr />
+
+@if (Model.Cars != null && Model.Cars.Count > 0)
+{
+    <table class="table  ">
+        <thead>
+            <tr>
+                <th>@Lang["col_manufacturer"]</th>
+                <th>@Lang["col_model"]</th>
+                <th>@Lang["col_year"]</th>
+                <th>@Lang["col_engine_type"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in Model.Cars)
+            {
+                <tr>
+                    <td>@car.Manufacturer</td>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.EngineType</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><i>@Lang["details_no_cars"]</i></p>
+}
+
 <div class="d-flex gap-3">
     @Html.ActionLink(
         Lang["details_edit"].ToString(),
         "Edit",
-        new { id = Model.CustomerId },
+        new { id = Model.Customer.CustomerId },
         new { @class = "btn btn-primary" }
     )
 
@@ -66,4 +97,4 @@
         null,
         new { @class = "btn btn-secondary" }
     )
-</div> 
+</div>

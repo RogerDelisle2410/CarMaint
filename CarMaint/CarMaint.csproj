@@ -238,6 +238,7 @@
     <Compile Include="Models\CustomerData.cs">
       <DependentUpon>CarMaintModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerDetailsViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MaintenanceHistory.cs">
       <DependentUpon>CarMaintModel.tt</DependentUpon>

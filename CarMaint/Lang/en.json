@@ -1,7 +1,10 @@
 ﻿{
   "nav_home": "Car Maintenance Project",
   "nav_menu": "Main Menu",
-
+  "select": "Select",
+  "English Name": "English Name",
+  "French Name": "French Name",
+  "Spanish Name": "Spanish Name",
   "menu_new_ticket": "New Maintenance Ticket",
   "menu_customer_info": "Customer Info",
   "menu_car_info": "Car Info",

@@ -33,75 +33,138 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>@Lang["car_create_info"]</h4>
-    <hr />
+    <div class="form-horizontal">
+        <h4>@Lang["car_create_info"]</h4>
+        <hr />
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-group">
-        @Html.Label(Lang["col_customer_name"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label(Lang["col_customer_name"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(Lang["col_manufacturer"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+
+                @Html.DropDownListFor(
+    model => model.Manufacturer,
+    new List<SelectListItem>
+    {
+        new SelectListItem { Text = Lang["select"].ToString(), Value = "" },
+
+        new SelectListItem { Text = "Toyota", Value = "Toyota" },
+        new SelectListItem { Text = "Honda", Value = "Honda" },
+        new SelectListItem { Text = "Ford", Value = "Ford" },
+        new SelectListItem { Text = "Chevrolet", Value = "Chevrolet" },
+        new SelectListItem { Text = "Nissan", Value = "Nissan" },
+        new SelectListItem { Text = "Hyundai", Value = "Hyundai" },
+        new SelectListItem { Text = "Kia", Value = "Kia" },
+        new SelectListItem { Text = "Volkswagen", Value = "Volkswagen" },
+        new SelectListItem { Text = "BMW", Value = "BMW" },
+        new SelectListItem { Text = "Mercedes-Benz", Value = "Mercedes-Benz" },
+        new SelectListItem { Text = "Audi", Value = "Audi" },
+        new SelectListItem { Text = "Subaru", Value = "Subaru" },
+        new SelectListItem { Text = "Mazda", Value = "Mazda" },
+        new SelectListItem { Text = "Dodge", Value = "Dodge" },
+        new SelectListItem { Text = "Jeep", Value = "Jeep" }
+    },
+    new { @class = "form-control" }
+)
+
+
+
+                @Html.ValidationMessageFor(model => model.Manufacturer, "", new { @class = "text-danger" })
+
+                @*@Html.EditorFor(model => model.Manufacturer, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.ValidationMessageFor(model => model.Manufacturer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(Lang["col_model"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(Lang["col_year"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Year, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(Lang["col_engine_type"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.EngineType, new { htmlAttributes = new { @class = "form-control" } })*@
+
+                @Html.DropDownListFor(
+     model => model.EngineType,
+     new List<SelectListItem>
+     {
+         new SelectListItem { Text = Lang["select"].ToString(), Value = "" },
+
+         new SelectListItem { Text = "Diesel", Value = "Diesel" },
+         new SelectListItem { Text = "Electric", Value = "Electric" },
+         new SelectListItem { Text = "Gasoline", Value = "Gasoline" },
+         new SelectListItem { Text = "Hybrid", Value = "Hybrid" },
+         new SelectListItem { Text = "Turbo", Value = "Turbo" }
+     },
+     new { @class = "form-control" }
+ )
+
+
+                @Html.ValidationMessageFor(model => model.EngineType, "", new { @class = "text-danger" })
+
+
+                @Html.ValidationMessageFor(model => model.EngineType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label(Lang["col_mileage"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Mileage, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Mileage, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top:25px;">
+            <div class="col-md-offset-2 col-md-10" style="display:flex; gap:12px;">
+
+                <input type="submit"
+                       value="@Lang["car_create_button"]"
+                       class="btn btn-primary" />
+
+                @Html.ActionLink(
+                    Lang["car_create_back"].ToString(),
+                    "Index",
+                    null,
+                    new { @class = "btn btn-secondary" }
+                )
+
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.Label(Lang["col_manufacturer"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Manufacturer, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Manufacturer, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label(Lang["col_model"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label(Lang["col_year"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Year, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label(Lang["col_engine_type"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.EngineType, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.EngineType, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label(Lang["col_mileage"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Mileage, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Mileage, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group" style="margin-top:25px;">
-        <div class="col-md-offset-2 col-md-10" style="display:flex; gap:12px;">
-
-            <input type="submit"
-                   value="@Lang["car_create_button"]"
-                   class="btn btn-primary" />
-
-            @Html.ActionLink(
-                Lang["car_create_back"].ToString(),
-                "Index",
-                null,
-                new { @class = "btn btn-secondary" }
-            )
-
-        </div>
-    </div> 
-</div>
 } 
+<style>
+    select.form-control {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><polygon points='0,0 20,0 10,10'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 12px;
+        padding-right: 30px;
+    }
+</style>

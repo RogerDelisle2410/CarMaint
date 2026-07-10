@@ -1,7 +1,10 @@
 ﻿{
   "nav_home": "Projet d'entretien automobile",
   "nav_menu": "Menu Principal",
-
+  "select": "Sélectionner",
+  "English Name": "Nom Anglais",
+  "French Name": "Nom Français",
+  "Spanish Name": "Nom Espagnol",
   "menu_new_ticket": "Nouveau Ticket d'Entretien",
   "menu_customer_info": "Informations Client",
   "menu_car_info": "Informations Voiture",

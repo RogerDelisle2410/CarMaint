@@ -28,19 +28,39 @@ namespace CarMaint.Controllers
         }
 
         // GET: CustomerDatas/Details/5
-        public ActionResult Details(int? id)
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    CustomerData customerData = db.CustomerDatas.Find(id);
+        //    if (customerData == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(customerData);
+        //}
+
+        public ActionResult Details(int id)
         {
-            if (id == null)
+            var customer = db.CustomerDatas.Find(id);
+
+            // Get cars for this customer
+            var cars = db.CarDatas
+                         .Where(c => c.CustomerId == id)
+                         .ToList();
+
+            // Build a view model
+            var vm = new CustomerDetailsViewModel
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CustomerData customerData = db.CustomerDatas.Find(id);
-            if (customerData == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customerData);
+                Customer = customer,
+                Cars = cars
+            };
+
+            return View(vm);
         }
+
 
         // GET: CustomerDatas/Create
         public ActionResult Create()

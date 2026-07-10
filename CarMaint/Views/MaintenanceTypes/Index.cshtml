@@ -131,11 +131,27 @@
                     <td style="text-align:center;">@Html.DisplayFor(modelItem => item.Electric)</td>
 
                     <td style="text-align: center;">
-                        @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.MaintId }) |
-                        @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.MaintId })
-                        @*|
-                            @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.MaintId })*@
+                        @Html.ActionLink(
+                            Lang["btn_edit"].ToString(),
+                            "Edit",
+                            new { id = item.MaintId },
+                            new { @class = "btn btn-primary btn-sm" }
+                        )
+
+                        @Html.ActionLink(
+                            Lang["btn_details"].ToString(),
+                            "Details",
+                            new { id = item.MaintId },
+                            new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" }
+                        )
                     </td>
+
+                    <!--<td style="text-align: center;">
+        @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.MaintId }) |
+        @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.MaintId })-->
+                    @*|
+        @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.MaintId })*@
+                    <!--</td>-->
                 </tr>
             }
         </table>

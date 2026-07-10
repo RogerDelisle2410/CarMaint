@@ -93,13 +93,15 @@
                 <td class="col-lg-2">@item.Model</td>
                 <td class="col-lg-2">@item.EngineType</td>
                 <td class="col-lg-1">@item.Year</td>
-                <td class="col-lg-2">
+                <td class="col-lg-2" style="text-align: center;">
                     @Html.ActionLink(
                         Lang["btn_select_car"].ToString(),
                         "SelectCar",
-                        new { engineType = item.EngineType, carId = item.CarId }
+                        new { engineType = item.EngineType, carId = item.CarId },
+                        new { @class = "btn btn-success btn-sm" }
                     )
                 </td>
+
                 <th class="col-lg-3" style="border:none"></th>
             </tr>
         }

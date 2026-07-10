@@ -18,7 +18,21 @@
 
     ViewBag.Title = Lang["ticket_title"].ToString();
 }
-
+<div id="customAlert"
+     style="display:none;
+            position:fixed;
+            top:50%;
+            left:50%;
+            transform:translate(-50%, -50%);
+            background:white;
+            border:3px solid #007bff;
+            padding:20px;
+            border-radius:8px;
+            box-shadow:0 0 15px rgba(0,0,0,0.3);
+            z-index:9999;
+            text-align:center;
+            width:300px;">
+</div>
 
 <h2>@Lang["ticket_title"]</h2>
 <h4>@Lang["ticket_select_type_required"]</h4>
@@ -38,9 +52,10 @@
     }
 </style>
 
-<script src="//code.jquery.com/jquery-3.1.0.slim.min.js"></script>
+@*<script src="//code.jquery.com/jquery-3.1.0.slim.min.js"></script>*@
 <script src="sumTable.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
     var orderArray = [];
@@ -96,7 +111,6 @@
             cell3.style.textAlign = "right";
             cell3.style.whiteSpace = "nowrap";
 
-
             var sum = 0;
             var cells = document.querySelectorAll("#MainTable tr td:last-child");
             cells.forEach(function (c) {
@@ -149,20 +163,31 @@
                 dataType: "json",
 
                 success: function (json) {
-                    alert("@Lang["msg_history_updated"]");
-                    if (json.isRedirect) {
-                        window.location.href = json.redirectUrl;
+                showAlert("@Lang["msg_history_updated"]");
+
+                if (json.isRedirect) {
+                    window.location.href = json.redirectUrl;
                     }
                 },
-
                 error: function () {
-                    alert("@Lang["msg_ajax_error"]" + orderArray);
+                    showAlert("@Lang["msg_ajax_error"]" + " " + orderArray);
                 }
             });
 
             $('input:checkbox').prop('checked', false);
         }
     }
+
+    function showAlert(message) {
+        var box = document.getElementById("customAlert");
+        box.innerText = message;
+        box.style.display = "block";
+
+        setTimeout(function () {
+            box.style.display = "none";
+        }, 2500);
+    }
+
 </script>
 
 <table id="myTable1" class="table col-lg-12">
@@ -193,7 +218,6 @@
                     <th class="col-lg-1" style="border:none">@Lang["col_maint_id"]</th>
                     <th class="col-lg-3" style="border:none">@Lang["col_task_name"]</th>
                     <th class="col-lg-1" style="border:none">@Lang["col_cost"]</th>
-                    @*<th class="col-lg-1" style="border:none">@Lang["col_select"]</th>*@
                 </tr>
             </thead>
 
@@ -224,38 +248,10 @@
 
     <div class="table-responsive col-md-6">
 
-        <!-- ⭐ TOP BAR: Total + Create Ticket ⭐ -->
-        <div id="SummaryBar" style="display:none; margin-bottom:10px;">
-
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0;">
-
-                <!-- Total -->
-                <div style="font-size:18px; font-weight:bold;">
-                    @Lang["col_total"]$ <span id="aTotal"> 0.00</span>
-                </div>
-
-                <!-- Button -->
-                <button id="theButton"
-                        onclick="proceed()"
-                        class="btn btn-primary btn-sm"
-                        style="padding:6px 14px;">
-                    @Lang["btn_create_ticket"]
-                </button>
-
-            </div>
-
-            <hr style="margin:8px 0;" />
-        </div>
-
         <!-- ⭐ SUMMARY TABLE ⭐ -->
         <table id="HeaderTable" class="table table-striped">
             <thead>
                 <tr>
-                    @*<th class="col-lg-1" style="border:none"></th>
-                        <th class="col-lg-1" style="border:none">@Lang["col_maint_id"]</th>
-                        <th class="col-lg-2" style="border:none">@Lang["col_type"]</th>
-                        <th class="col-lg-1" style="border:none">@Lang["col_cost"]</th>*@
-
                     <th class="col-lg-1" style="border:none">@Lang["col_maint_id"]</th>
                     <th class="col-lg-2" style="border:none">@Lang["col_type"]</th>
                     <th class="col-lg-1" style="border:none">@Lang["col_cost"]</th>
@@ -266,8 +262,25 @@
             <tbody id="MainTable"></tbody>
         </table>
 
+        <div id="SummaryBar" style="display:none; margin-bottom:10px;">
+
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0;">
+
+                <!-- Button -->
+                <button id="theButton"
+                        onclick="proceed()"
+                        class="btn btn-primary btn-sm"
+                        style="padding:6px 14px;">
+                    @Lang["btn_create_ticket"]
+                </button>
+
+                <!-- Total -->
+                <div style="font-size:18px; font-weight:bold;">
+                    @Lang["col_total"] $ <span id="aTotal"> 0.00</span>
+                </div>
+            </div>
+
+            <hr style="margin:8px 0;" />
+        </div>
     </div>
-
-
-
 </div>

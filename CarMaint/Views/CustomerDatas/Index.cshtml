@@ -121,18 +121,51 @@
                     <td style="text-align: center;">@item.City</td>
                     <td style="text-align: center;">@item.PostalCode</td>
                     <td style="text-align: center;">@item.Phone</td>
-
                     <td style="text-align: center;">
-                        @Html.ActionLink("Select", "Select", "MaintTicket", new { id = item.CustomerId },
-                            null
+                        @Html.ActionLink(
+                            "Select",
+                            "Select",
+                            "MaintTicket",
+                            new { id = item.CustomerId },
+                            new { @class = "btn btn-success btn-sm" }
                         )
                     </td>
 
+                    @*<td style="text-align: center;">
+            @Html.ActionLink("Select", "Select", "MaintTicket", new { id = item.CustomerId },
+                null
+            )
+        </td>*@
+
+                    @*<td style="text-align: center;">
+            @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.CustomerId }) |
+            @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.CustomerId }) |
+            @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.CustomerId })
+        </td>*@
+
                     <td style="text-align: center;">
-                        @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.CustomerId }) |
-                        @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.CustomerId }) |
-                        @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.CustomerId })
+                        @Html.ActionLink(
+                            Lang["btn_edit"].ToString(),
+                            "Edit",
+                            new { id = item.CustomerId },
+                            new { @class = "btn btn-primary btn-sm" }
+                        )
+
+                        @Html.ActionLink(
+                            Lang["btn_details"].ToString(),
+                            "Details",
+                            new { id = item.CustomerId },
+                            new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" }
+                        )
+
+                        @Html.ActionLink(
+                            Lang["btn_delete"].ToString(),
+                            "Delete",
+                            new { id = item.CustomerId },
+                            new { @class = "btn btn-danger btn-sm", style = "margin-left: 6px;" }
+                        )
                     </td>
+
                 </tr>
             }
         </table>

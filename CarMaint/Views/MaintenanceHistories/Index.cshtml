@@ -100,12 +100,22 @@
                         <td style="text-align: right;">@Html.DisplayFor(modelItem => item.Date)</td>
                         <td style="text-align:right;">@string.Format("{0:c}", item.Cost)</td>
 
-                        <td style="text-align: center;">
-                            @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.HistoryId }) |
-                            @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.HistoryId })
-                            @*|
-                                @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.HistoryId })*@
+                        <td style="text-align:center; width:200px;">
+                            @Html.ActionLink(
+                                Lang["btn_edit"].ToString(),
+                                "Edit",
+                                new { id = item.HistoryId },
+                                new { @class = "btn btn-sm btn-primary" }
+                            )
+
+                            @Html.ActionLink(
+                                Lang["btn_details"].ToString(),
+                                "Details",
+                                new { id = item.HistoryId },
+                                new { @class = "btn btn-sm btn-info", style = "margin-left:6px;" }
+                            )
                         </td>
+
                     </tr>
                 }
 
@@ -131,16 +141,16 @@
                 <th style="background-color:white"></th>
                 <th style="background-color:white"></th>
                 <th style="background-color:white"></th>
-                <th>
-                    @if (ViewBag.Total > 0)
-                    {
-                    <th>
+
+                @if (ViewBag.Total > 0)
+                {
+                    <th style="background-color:white; text-align:right;">
                         @Lang["hist_total_cost"]:
                         @(((decimal)ViewBag.Total).ToString("C2"))
                     </th>
                 }
-                    </th>
-                </tr>
-            </table>
-        </div>
-    </body>
+            </tr>
+        </table>
+    </div>
+</body>
+

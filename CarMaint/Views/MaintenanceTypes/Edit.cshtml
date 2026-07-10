@@ -1,31 +1,8 @@
 ﻿@model CarMaint.Models.MaintenanceType
 @using System.IO;
 
-@using Newtonsoft.Json.Linq
-
-@*@{
-        string lang = "en";
-        if (Request.Cookies["lang"] != null)
-        {
-            lang = Request.Cookies["lang"].Value;
-        }
-
-        JObject Lang;
-
-        try
-        {
-            string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
-            string jsonText = System.IO.File.ReadAllText(jsonPath);
-            Lang = JObject.Parse(jsonText);
-        }
-        catch
-        {
-            // Fallback to English if Azure can't find the file
-            string fallbackPath = Server.MapPath("~/Lang/en.json");
-            string fallbackText = System.IO.File.ReadAllText(fallbackPath);
-            Lang = JObject.Parse(fallbackText);
-        }
-    }*@
+@using Newtonsoft.Json.Linq 
+ 
 @{
     // Load selected language
     string lang = "en";
@@ -119,7 +96,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group"  style="margin-top:20px;">
         <div class="col-md-offset-2 col-md-10" style="display:flex; gap:12px;">
 
             <button type="submit" class="btn btn-primary">

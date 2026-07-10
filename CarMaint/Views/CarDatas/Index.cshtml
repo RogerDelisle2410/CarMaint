@@ -130,10 +130,33 @@
                     <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Mileage)</td>
 
                     <td style="text-align: center; width:200px;">
-                        @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.CarId }) |
-                        @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.CarId }) |
-                        @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.CarId })
+                        @Html.ActionLink(
+                            Lang["btn_edit"].ToString(),
+                            "Edit",
+                            new { id = item.CarId },
+                            new { @class = "btn btn-primary btn-sm" }
+                        )
+
+                        @Html.ActionLink(
+                            Lang["btn_details"].ToString(),
+                            "Details",
+                            new { id = item.CarId },
+                            new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" }
+                        )
+
+                        @Html.ActionLink(
+                            Lang["btn_delete"].ToString(),
+                            "Delete",
+                            new { id = item.CarId },
+                            new { @class = "btn btn-danger btn-sm", style = "margin-left: 6px;" }
+                        )
                     </td>
+
+                    @*<td style="text-align: center; width:200px;">
+            @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.CarId }) |
+            @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.CarId }) |
+            @Html.ActionLink(Lang["btn_delete"].ToString(), "Delete", new { id = item.CarId })
+        </td>*@
                 </tr>
             }
         </table>

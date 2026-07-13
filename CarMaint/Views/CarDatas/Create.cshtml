@@ -24,8 +24,7 @@
         string fallbackText = System.IO.File.ReadAllText(fallbackPath);
         Lang = JObject.Parse(fallbackText);
     }
-}
-
+} 
 
 <h2>@Lang["car_create_title"]</h2>
 
@@ -42,7 +41,13 @@
         <div class="form-group">
             @Html.Label(Lang["col_customer_name"].ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList(
+                "CustomerId",
+                null,
+                Lang["col_select_customer"].ToString(),
+                htmlAttributes: new { @class = "form-control" }
+                )
+
                 @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -155,7 +160,7 @@
             </div>
         </div>
     </div>
-} 
+}
 <style>
     select.form-control {
         appearance: none;

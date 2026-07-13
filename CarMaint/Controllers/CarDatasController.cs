@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CarMaint.Models;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace CarMaint.Controllers
 {
@@ -14,30 +16,52 @@ namespace CarMaint.Controllers
     {
         private readonly BCATPEntities1 db = new BCATPEntities1();
 
+        // Load JSON language file
+        private JObject LoadLang()
+        {
+            string lang = "en";
+
+            if (Request.Cookies["lang"] != null)
+                lang = Request.Cookies["lang"].Value;
+
+            try
+            {
+                string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+                string jsonText = System.IO.File.ReadAllText(jsonPath);
+                return JObject.Parse(jsonText);
+            }
+            catch
+            {
+                string fallbackPath = Server.MapPath("~/Lang/en.json");
+                string fallbackText = System.IO.File.ReadAllText(fallbackPath);
+                return JObject.Parse(fallbackText);
+            }
+        }
+
         // GET: CarDatas
         public ActionResult Index(string searchString)
         {
-            var carData = from s in db.CarDatas
-                               select s;
+            var carData = db.CarDatas.AsQueryable();
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 carData = carData.Where(s => s.Manufacturer.ToLower().Contains(searchString.ToLower()));
             }
-            return View(carData.ToList().OrderBy(t => t.Manufacturer));
+
+            return View(carData.OrderBy(t => t.Manufacturer).ToList());
         }
 
         // GET: CarDatas/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             CarData carData = db.CarDatas.Find(id);
+
             if (carData == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(carData);
         }
 
@@ -45,92 +69,184 @@ namespace CarMaint.Controllers
         public ActionResult Create()
         {
             ViewBag.CustomerId = new SelectList(db.CustomerDatas, "CustomerId", "Name");
+
+            var brands = db.CarBrands
+                .OrderBy(b => b.BrandName)
+                .Select(b => new SelectListItem
+                {
+                    Text = b.BrandName,
+                    Value = b.BrandName
+                })
+                .ToList();
+
+            brands.Insert(0, new SelectListItem { Text = "Select", Value = "" });
+
+            ViewBag.ManufacturerList = brands;
+
             return View(new CarData());
         }
 
         // POST: CarDatas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CarId,CustomerId,Manufacturer,Model,Year,EngineType,Mileage")] CarData carData)
+        public ActionResult Create(CarData carData)
         {
-            if (ModelState.IsValid)
+            JObject Lang = LoadLang();
+
+            // JSON-based validation
+            if (carData.CustomerId == 0)
+                ModelState.AddModelError("CustomerId", Lang["customerid_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.Manufacturer))
+                ModelState.AddModelError("Manufacturer", Lang["manufacturer_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.Model))
+                ModelState.AddModelError("Model", Lang["model_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.Year))
+                ModelState.AddModelError("Year", Lang["year_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.EngineType))
+                ModelState.AddModelError("EngineType", Lang["enginetype_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.Mileage))
+                ModelState.AddModelError("Mileage", Lang["mileage_required"].ToString());
+
+            if (!ModelState.IsValid)
             {
-                db.CarDatas.Add(carData);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.CustomerId = new SelectList(db.CustomerDatas, "CustomerId", "Name", carData.CustomerId);
+
+                var brands = db.CarBrands
+                    .OrderBy(b => b.BrandName)
+                    .Select(b => new SelectListItem
+                    {
+                        Text = b.BrandName,
+                        Value = b.BrandName
+                    })
+                    .ToList();
+
+                brands.Insert(0, new SelectListItem { Text = "Select", Value = "" });
+
+                ViewBag.ManufacturerList = brands;
+
+                return View(carData);
             }
 
-            ViewBag.CustomerId = new SelectList(db.CustomerDatas, "CustomerId", "Name", carData.CustomerId);
-            return View(carData);
+            db.CarDatas.Add(carData);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: CarDatas/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             CarData carData = db.CarDatas.Find(id);
+
             if (carData == null)
-            {
                 return HttpNotFound();
-            }
+
             ViewBag.CustomerId = new SelectList(db.CustomerDatas, "CustomerId", "Name", carData.CustomerId);
+
+            var brands = db.CarBrands
+                .OrderBy(b => b.BrandName)
+                .Select(b => new SelectListItem
+                {
+                    Text = b.BrandName,
+                    Value = b.BrandName
+                })
+                .ToList();
+
+            brands.Insert(0, new SelectListItem { Text = "Select", Value = "" });
+
+            ViewBag.ManufacturerList = brands;
+
             return View(carData);
         }
 
         // POST: CarDatas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CarId,CustomerId,Manufacturer,Model,Year,EngineType,Mileage")] CarData carData)
+        public ActionResult Edit(CarData carData)
         {
-            if (ModelState.IsValid)
+            JObject Lang = LoadLang();
+
+            // JSON-based validation
+            if (carData.CustomerId == 0)
+                ModelState.AddModelError("CustomerId", Lang["customerid_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.Manufacturer))
+                ModelState.AddModelError("Manufacturer", Lang["manufacturer_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.Model))
+                ModelState.AddModelError("Model", Lang["model_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.Year))
+                ModelState.AddModelError("Year", Lang["year_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.EngineType))
+                ModelState.AddModelError("EngineType", Lang["enginetype_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(carData.Mileage))
+                ModelState.AddModelError("Mileage", Lang["mileage_required"].ToString());
+
+            if (!ModelState.IsValid)
             {
-                db.Entry(carData).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.CustomerId = new SelectList(db.CustomerDatas, "CustomerId", "Name", carData.CustomerId);
+
+                var brands = db.CarBrands
+                    .OrderBy(b => b.BrandName)
+                    .Select(b => new SelectListItem
+                    {
+                        Text = b.BrandName,
+                        Value = b.BrandName
+                    })
+                    .ToList();
+
+                brands.Insert(0, new SelectListItem { Text = "Select", Value = "" });
+
+                ViewBag.ManufacturerList = brands;
+
+                return View(carData);
             }
-            ViewBag.CustomerId = new SelectList(db.CustomerDatas, "CustomerId", "Name", carData.CustomerId);
-            return View(carData);
+
+            db.Entry(carData).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: CarDatas/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             CarData carData = db.CarDatas.Find(id);
+
             if (carData == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(carData);
         }
 
         // POST: CarDatas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            CarData carData = db.CarDatas.Find(id);
-            db.CarDatas.Remove(carData);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        ////[HttpPost, ActionName("Delete")]
+        ////[ValidateAntiForgeryToken]
+        ////public ActionResult DeleteConfirmed(int id)
+        ////{
+        ////    CarData carData = db.CarDatas.Find(id);
+        ////    db.CarDatas.Remove(carData);
+        ////    db.SaveChanges();
+        ////    return RedirectToAction("Index");
+        ////}
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
+
             base.Dispose(disposing);
         }
     }

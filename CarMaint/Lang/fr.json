@@ -84,7 +84,7 @@
   "select_type_of_maintenance_required": "Sélectionner le type de maintenance requis",
   "maint_id": "ID de maintenance",
   "task_name": "Nom de la tâche",
-  "cost": "Coût", 
+  "cost": "Coût",
   "type": "Type",
   "create_ticket": "Créer le billet",
   "total": "Total :",
@@ -166,7 +166,28 @@
   "Actions": "Actions",
 
   "help_title": "Que fait cette application ?",
-  "help_text": "Cette application vous permet de gérer les voitures, les clients, les types d’entretien et l’historique de maintenance. Vous pouvez ajouter, modifier, supprimer et rechercher des enregistrements de maintenance, suivre les coûts et afficher les détails pour chaque véhicule et client."
+  "help_text": "Cette application vous permet de gérer les voitures, les clients, les types d’entretien et l’historique de maintenance. Vous pouvez ajouter, modifier, supprimer et rechercher des enregistrements de maintenance, suivre les coûts et afficher les détails pour chaque véhicule et client.",
+
+  "taskname_en_required": "Le nom anglais est requis.",
+  "taskname_fr_required": "Le nom français est requis.",
+  "taskname_es_required": "Le nom espagnol est requis.",
+  "cost_required": "Le coût est requis.",
+
+  "customerid_required": "Le client est requis.",
+  "name_required": "Le nom est requis.",
+  "address_required": "L'adresse est requise.",
+  "city_required": "La ville est requise.",
+  "postalcode_required": "Le code postal est requis.",
+  "phone_required": "Le numéro de téléphone est requis.",
+
+  "manufacturer_required": "Le fabricant est requis.",
+  "model_required": "Le modèle est requis.",
+  "year_required": "L'année est requise.",
+  "enginetype_required": "Le type de moteur est requis.",
+  "mileage_required": "Le kilométrage est requis.",
+  "fuel_required": "Vous devez sélectionner au moins un type de carburant."
+
+
 
 
 

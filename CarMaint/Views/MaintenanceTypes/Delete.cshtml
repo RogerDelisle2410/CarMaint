@@ -1,6 +1,5 @@
 ﻿@model CarMaint.Models.MaintenanceType
 @using System.IO;
-
 @using Newtonsoft.Json.Linq
 
 @{
@@ -9,9 +8,7 @@
     {
         lang = Request.Cookies["lang"].Value;
     }
-
     JObject Lang;
-
     try
     {
         string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
@@ -20,13 +17,11 @@
     }
     catch
     {
-        // Fallback to English if Azure can't find the file
         string fallbackPath = Server.MapPath("~/Lang/en.json");
         string fallbackText = System.IO.File.ReadAllText(fallbackPath);
         Lang = JObject.Parse(fallbackText);
     }
 }
-
 
 <h2>@Lang["delete_title"]</h2>
 <h3>@Lang["delete_confirm"]</h3>
@@ -34,8 +29,8 @@
 <div>
     <h4>@Lang["type_of_maintenance"]</h4>
     <hr />
-    <dl class="dl-horizontal">
 
+    <dl class="dl-horizontal">
         <dt>@Lang["task_name"]</dt>
         <dd>@Html.DisplayFor(model => model.TaskName)</dd>
 
@@ -50,14 +45,14 @@
 
         <dt>@Lang["electric"]</dt>
         <dd>@Html.DisplayFor(model => model.Electric)</dd>
-
     </dl>
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("DeleteConfirmed", "MaintenanceTypes"))
     {
         @Html.AntiForgeryToken()
-        <div class="form-actions no-color" style="display:flex; gap:12px;">
+        @Html.HiddenFor(model => model.MaintId)
 
+        <div class="form-actions no-color" style="display:flex; gap:12px;">
             <button type="submit" class="btn btn-danger">
                 @Lang["delete_button"]
             </button>
@@ -68,7 +63,6 @@
                 null,
                 new { @class = "btn btn-secondary" }
             )
-
-        </div> 
+        </div>
     }
 </div>

@@ -13,6 +13,7 @@
         <EntityTypeShape EntityType="BCATPModel.CarData" Width="1.5" PointX="5.125" PointY="0.5" />
         <AssociationConnector Association="BCATPModel.FK_CarData_CustomerData" />
         <AssociationConnector Association="BCATPModel.FK_MaintenanceHistory_CarData" />
+        <EntityTypeShape EntityType="BCATPModel.CarBrand" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

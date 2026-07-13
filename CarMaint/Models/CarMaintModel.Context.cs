@@ -40,6 +40,8 @@ public partial class BCATPEntities1 : DbContext
 
     public virtual DbSet<CarData> CarDatas { get; set; }
 
+    public virtual DbSet<CarBrand> CarBrands { get; set; }
+
 }
 
 }

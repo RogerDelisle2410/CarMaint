@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using CarMaint.Models;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using CarMaint.Models;
 
 namespace CarMaint.Controllers
 {
@@ -14,44 +13,52 @@ namespace CarMaint.Controllers
     {
         private readonly BCATPEntities1 db = new BCATPEntities1();
 
-        // GET: CustomerDatas
-
-        public ActionResult Index(string searchString)
+        // ---------------------------
+        // LANGUAGE LOADER
+        // ---------------------------
+        private JObject LoadLang()
         {
-            var customerData = from s in db.CustomerDatas
-                            select s;
-            if (!String.IsNullOrEmpty(searchString))
+            string lang = Request.Cookies["lang"]?.Value ?? "en";
+
+            try
             {
-                customerData = customerData.Where(s => s.Name.ToLower().Contains(searchString.ToLower()));
+                string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+                string jsonText = System.IO.File.ReadAllText(jsonPath);
+                return JObject.Parse(jsonText);
             }
-            return View(customerData.ToList().OrderBy(t => t.Name));
+            catch
+            {
+                string fallbackPath = Server.MapPath("~/Lang/en.json");
+                string fallbackText = System.IO.File.ReadAllText(fallbackPath);
+                return JObject.Parse(fallbackText);
+            }
         }
 
-        // GET: CustomerDatas/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    CustomerData customerData = db.CustomerDatas.Find(id);
-        //    if (customerData == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(customerData);
-        //}
+        // ---------------------------
+        // INDEX
+        // ---------------------------
+        public ActionResult Index(string searchString)
+        {
+            var customers = db.CustomerDatas.AsQueryable();
 
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                customers = customers.Where(c => c.Name.ToLower().Contains(searchString.ToLower()));
+            }
+
+            return View(customers.OrderBy(c => c.Name).ToList());
+        }
+
+        // ---------------------------
+        // DETAILS (with cars)
+        // ---------------------------
         public ActionResult Details(int id)
         {
             var customer = db.CustomerDatas.Find(id);
+            if (customer == null) return HttpNotFound();
 
-            // Get cars for this customer
-            var cars = db.CarDatas
-                         .Where(c => c.CustomerId == id)
-                         .ToList();
+            var cars = db.CarDatas.Where(c => c.CustomerId == id).ToList();
 
-            // Build a view model
             var vm = new CustomerDetailsViewModel
             {
                 Customer = customer,
@@ -61,93 +68,96 @@ namespace CarMaint.Controllers
             return View(vm);
         }
 
-
-        // GET: CustomerDatas/Create
+        // ---------------------------
+        // CREATE
+        // ---------------------------
         public ActionResult Create()
         {
             return View(new CustomerData());
         }
 
-        // POST: CustomerDatas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CustomerId,Name,Address,City,PostalCode,Phone")] CustomerData customerData)
+        public ActionResult Create(CustomerData customer)
         {
-            if (ModelState.IsValid)
-            {
-                db.CustomerDatas.Add(customerData);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            JObject Lang = LoadLang();
 
-            return View(customerData);
-        }
+            // VALIDATION
+            if (string.IsNullOrWhiteSpace(customer.Name))
+                ModelState.AddModelError("Name", Lang["name_required"].ToString());
 
-        // GET: CustomerDatas/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CustomerData customerData = db.CustomerDatas.Find(id);
-            if (customerData == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customerData);
-        }
+            if (string.IsNullOrWhiteSpace(customer.Address))
+                ModelState.AddModelError("Address", Lang["address_required"].ToString());
 
-        // POST: CustomerDatas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CustomerId,Name,Address,City,PostalCode,Phone")] CustomerData customerData)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(customerData).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(customerData);
-        }
+            if (string.IsNullOrWhiteSpace(customer.City))
+                ModelState.AddModelError("City", Lang["city_required"].ToString());
 
-        // GET: CustomerDatas/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CustomerData customerData = db.CustomerDatas.Find(id);
-            if (customerData == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customerData);
-        }
+            if (string.IsNullOrWhiteSpace(customer.PostalCode))
+                ModelState.AddModelError("PostalCode", Lang["postalcode_required"].ToString());
 
-        // POST: CustomerDatas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            CustomerData customerData = db.CustomerDatas.Find(id);
-            db.CustomerDatas.Remove(customerData);
+            if (string.IsNullOrWhiteSpace(customer.Phone))
+                ModelState.AddModelError("Phone", Lang["phone_required"].ToString());
+
+            if (!ModelState.IsValid)
+                return View(customer);
+
+            db.CustomerDatas.Add(customer);
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
+        // ---------------------------
+        // EDIT
+        // ---------------------------
+        public ActionResult Edit(int? id)
+        {
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var customer = db.CustomerDatas.Find(id);
+            if (customer == null) return HttpNotFound();
+
+            return View(customer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(CustomerData customer)
+        {
+            JObject Lang = LoadLang();
+
+            // VALIDATION
+            if (string.IsNullOrWhiteSpace(customer.Name))
+                ModelState.AddModelError("Name", Lang["name_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(customer.Address))
+                ModelState.AddModelError("Address", Lang["address_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(customer.City))
+                ModelState.AddModelError("City", Lang["city_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(customer.PostalCode))
+                ModelState.AddModelError("PostalCode", Lang["postalcode_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(customer.Phone))
+                ModelState.AddModelError("Phone", Lang["phone_required"].ToString());
+
+            if (!ModelState.IsValid)
+                return View(customer);
+
+            // SAVE
+            db.Entry(customer).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        // ---------------------------
+        // DISPOSE
+        // ---------------------------
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            if (disposing) db.Dispose();
             base.Dispose(disposing);
         }
     }

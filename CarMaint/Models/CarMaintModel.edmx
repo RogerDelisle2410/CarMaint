@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="BCATPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CarBrands">
+          <Key>
+            <PropertyRef Name="BrandId" />
+          </Key>
+          <Property Name="BrandId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BrandName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" />
+        </EntityType>
         <EntityType Name="CarDatas">
           <Key>
             <PropertyRef Name="CarId" />
@@ -53,7 +62,9 @@
           <Property Name="TaskName_ES" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <Association Name="FK_CarData_CustomerData">
-          <End Role="CustomerDatas" Type="Self.CustomerDatas" Multiplicity="1" />
+          <End Role="CustomerDatas" Type="Self.CustomerDatas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="CarDatas" Type="Self.CarDatas" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CustomerDatas">
@@ -65,7 +76,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MaintenanceHistory_CarData">
-          <End Role="CarDatas" Type="Self.CarDatas" Multiplicity="1" />
+          <End Role="CarDatas" Type="Self.CarDatas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="MaintenanceHistories" Type="Self.MaintenanceHistories" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CarDatas">
@@ -73,18 +86,6 @@
             </Principal>
             <Dependent Role="MaintenanceHistories">
               <PropertyRef Name="CarId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MaintenanceHistory_CustomerData">
-          <End Role="CustomerDatas" Type="Self.CustomerDatas" Multiplicity="1" />
-          <End Role="MaintenanceHistories" Type="Self.MaintenanceHistories" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerDatas">
-              <PropertyRef Name="CustomerId" />
-            </Principal>
-            <Dependent Role="MaintenanceHistories">
-              <PropertyRef Name="CustId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -101,6 +102,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="BCATPModelStoreContainer">
+          <EntitySet Name="CarBrands" EntityType="Self.CarBrands" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarDatas" EntityType="Self.CarDatas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerDatas" EntityType="Self.CustomerDatas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MaintenanceHistories" EntityType="Self.MaintenanceHistories" Schema="dbo" store:Type="Tables" />
@@ -111,10 +113,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_MaintenanceHistory_CarData" Association="Self.FK_MaintenanceHistory_CarData">
             <End Role="CarDatas" EntitySet="CarDatas" />
-            <End Role="MaintenanceHistories" EntitySet="MaintenanceHistories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MaintenanceHistory_CustomerData" Association="Self.FK_MaintenanceHistory_CustomerData">
-            <End Role="CustomerDatas" EntitySet="CustomerDatas" />
             <End Role="MaintenanceHistories" EntitySet="MaintenanceHistories" />
           </AssociationSet>
           <AssociationSet Name="FK_MaintenanceHistory_MaintenanceType" Association="Self.FK_MaintenanceHistory_MaintenanceType">
@@ -200,6 +198,7 @@
             <End Role="CarData" EntitySet="CarDatas" />
             <End Role="MaintenanceHistory" EntitySet="MaintenanceHistories" />
           </AssociationSet>
+          <EntitySet Name="CarBrands" EntityType="BCATPModel.CarBrand" />
         </EntityContainer>
         <Association Name="FK_MaintenanceHistory_CustomerData">
           <End Type="BCATPModel.CustomerData" Role="CustomerData" Multiplicity="1" />
@@ -251,6 +250,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CarBrand">
+          <Key>
+            <PropertyRef Name="BrandId" />
+          </Key>
+          <Property Name="BrandId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BrandName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="7" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -308,6 +316,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+          <EntitySetMapping Name="CarBrands">
+            <EntityTypeMapping TypeName="BCATPModel.CarBrand">
+              <MappingFragment StoreEntitySet="CarBrands">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

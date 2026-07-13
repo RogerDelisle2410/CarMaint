@@ -253,20 +253,20 @@ namespace CarMaint.Controllers
         // ---------------------------
         // POST: MaintenanceHistories/Delete/5
         // ---------------------------
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            MaintenanceHistory history = db.MaintenanceHistories.Find(id);
+        ////[HttpPost, ActionName("Delete")]
+        ////[ValidateAntiForgeryToken]
+        ////public ActionResult DeleteConfirmed(int id)
+        ////{
+        ////    MaintenanceHistory history = db.MaintenanceHistories.Find(id);
 
-            if (history != null)
-            {
-                db.MaintenanceHistories.Remove(history);
-                db.SaveChanges();
-            }
+        ////    if (history != null)
+        ////    {
+        ////        db.MaintenanceHistories.Remove(history);
+        ////        db.SaveChanges();
+        ////    }
 
-            return RedirectToAction("Index");
-        }
+        ////    return RedirectToAction("Index");
+        ////}
 
         protected override void Dispose(bool disposing)
         {

@@ -214,6 +214,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CarBrand.cs">
+      <DependentUpon>CarMaintModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CarData.cs">
       <DependentUpon>CarMaintModel.tt</DependentUpon>
     </Compile>

@@ -84,7 +84,7 @@
   "select_type_of_maintenance_required": "Seleccionar tipo de mantenimiento requerido",
   "maint_id": "ID de mantenimiento",
   "task_name": "Nombre de la tarea",
-  "cost": "Costo", 
+  "cost": "Costo",
   "type": "Tipo",
   "create_ticket": "Crear ticket",
   "total": "Total:",
@@ -166,7 +166,28 @@
   "Actions": "Acciones  ",
 
   "help_title": "¿Qué hace esta aplicación?",
-  "help_text": "Esta aplicación le permite gestionar autos, clientes, tipos de mantenimiento y el historial de mantenimiento. Puede agregar, editar, eliminar y buscar registros de mantenimiento, rastrear costos y ver información detallada de cada vehículo y cliente."
+  "help_text": "Esta aplicación le permite gestionar autos, clientes, tipos de mantenimiento y el historial de mantenimiento. Puede agregar, editar, eliminar y buscar registros de mantenimiento, rastrear costos y ver información detallada de cada vehículo y cliente.",
+
+  "taskname_en_required": "El nombre en inglés es obligatorio.",
+  "taskname_fr_required": "El nombre en francés es obligatorio.",
+  "taskname_es_required": "El nombre en español es obligatorio.",
+  "cost_required": "El costo es obligatorio.",
+
+  "customerid_required": "El cliente es obligatorio.",
+  "name_required": "El nombre es obligatorio.",
+  "address_required": "La dirección es obligatoria.",
+  "city_required": "La ciudad es obligatoria.",
+  "postalcode_required": "El código postal es obligatorio.",
+  "phone_required": "El número de teléfono es obligatorio.",
+
+
+  "manufacturer_required": "El fabricante es obligatorio.",
+  "model_required": "El modelo es obligatorio.",
+  "year_required": "El año es obligatorio.",
+  "enginetype_required": "El tipo de motor es obligatorio.",
+  "mileage_required": "El kilometraje es obligatorio.",
+  "fuel_required": "Debe seleccionar al menos un tipo de combustible."
+
 
 
 }

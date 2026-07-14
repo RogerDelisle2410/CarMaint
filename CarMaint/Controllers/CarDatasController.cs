@@ -41,15 +41,16 @@ namespace CarMaint.Controllers
         // GET: CarDatas
         public ActionResult Index(string searchString)
         {
-            var carData = db.CarDatas.AsQueryable();
+            var cars = db.CarDatas
+                .Include(c => c.CustomerData);   // ⭐ FIX: eager load CustomerData
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                carData = carData.Where(s => s.Manufacturer.ToLower().Contains(searchString.ToLower()));
+                cars = cars.Where(c => c.Manufacturer.Contains(searchString));
             }
 
-            return View(carData.OrderBy(t => t.Manufacturer).ToList());
-        }
+            return View(cars.ToList());  // ⭐ Only ONE SQL query
+        } 
 
         // GET: CarDatas/Details/5
         public ActionResult Details(int? id)

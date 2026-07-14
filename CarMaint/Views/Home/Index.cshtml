@@ -12,6 +12,7 @@
     }
 
     JObject Lang;
+    
 
     try
     {
@@ -37,10 +38,10 @@
     {
         imagePath = "~/Image/Crappy_Tire_es.png";
     }
-} 
+}
 
 <div class="home-fullscreen">
-    
+
     <div style="display:flex; height:100%; overflow:hidden; align-items:flex-start;">
 
         <div style="width:25%; background:white; padding:30px; font-weight:bold; font-size:14px; line-height:1.8;
@@ -59,6 +60,9 @@
         </div>
 
     </div>
+
+
+     
     <!-- ONLY ONE HELP BUTTON -->
     <button id="helpBtn" style="margin-left:20px;">?</button>
 
@@ -66,18 +70,17 @@
     <div id="helpPopup" class="hidden"
          style="position:fixed; top:20%; left:20%; background:white; border:2px solid #333; padding:20px; z-index:9999;">
 
-        <p style="font-size:14px;">@Lang["help_title"]<p>
+        <p style="font-size:14px;">@Lang["help_title"]</p>
         <p>@Lang["help_text"]</p>
         <button onclick="document.getElementById('helpPopup').classList.add('hidden')">Close</button>
     </div>
-</div> 
+</div>
 
 <style>
     .hidden {
         display: none;
     }
-</style>
-<style>
+
     .menu-button {
         display: block;
         width: 100%;

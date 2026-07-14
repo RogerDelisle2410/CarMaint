@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<CarMaint.Models.CarData>
-
 @using Newtonsoft.Json.Linq
 
 @{
+    // Load language JSON (views cannot access layout variables)
     string lang = "en";
     if (Request.Cookies["lang"] != null)
     {
@@ -19,13 +19,11 @@
     }
     catch
     {
-        // Fallback to English if Azure can't find the file
         string fallbackPath = Server.MapPath("~/Lang/en.json");
         string fallbackText = System.IO.File.ReadAllText(fallbackPath);
         Lang = JObject.Parse(fallbackText);
     }
 }
-
 
 <h2>@Lang["veh_title"]</h2>
 
@@ -37,9 +35,6 @@
     </p>
 }
 
-@*<p>
-    @Html.ActionLink(Lang["veh_create_new"].ToString(), "Create")
-</p>*@
 <p>
     @Html.ActionLink(
         Lang["veh_create_new"].ToString(),
@@ -48,88 +43,90 @@
         new { @class = "btn-menu" }
     )
 </p>
-<head>
-    <style type="text/css">
-        table {
-            width: 90%;
-            table-layout: fixed;
-        }
 
-        td {
-            border: 1px solid black;
-        }
+<style>
+    table {
+        width: 100%;
+        table-layout: fixed;
+    }
 
-        .scrollingTable {
-            width: 1150px;
-            overflow-y: auto;
-        }
-        .btn-menu {
-            display: inline-block;
-            padding: 6px 12px; /* smaller padding */
-            background: #f2f2f2;
-            border: 1px solid #ccc;
-            border-radius: 4px; /* slightly smaller radius */
-            font-weight: bold;
-            font-size: 12px; /* smaller text */
-            color: #333;
-            text-decoration: none;
-            transition: 0.15s ease-in-out;
-        }
+    th, td {
+        border: 1px solid black;
+        padding: 6px;
+    }
 
-            .btn-menu:hover {
-                background: #e6e6e6;
-                border-color: #999;
-                cursor: pointer;
+    .scrollingTable {
+        max-height: 350px;
+        overflow-y: auto;
+        width: 100%;
+        max-width: 1150px;
+    }
+
+    .btn-menu {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 12px;
+        color: #333;
+        text-decoration: none;
+        transition: 0.15s ease-in-out;
+    }
+
+        .btn-menu:hover {
+            background: #e6e6e6;
+            border-color: #999;
+            cursor: pointer;
+        }
+</style>
+
+<script>
+    function makeTableScroll() {
+        var maxRows = 9;
+        var table = document.getElementById('myTable');
+        var wrapper = table.parentNode;
+        var rowsInTable = table.rows.length;
+        var height = 0;
+
+        if (rowsInTable > maxRows) {
+            for (var i = 0; i < maxRows; i++) {
+                height += table.rows[i].clientHeight;
             }
-
-    </style>
-
-    <script type="text/javascript">
-        function makeTableScroll() {
-            var maxRows = 10;
-            var table = document.getElementById('myTable');
-            var wrapper = table.parentNode;
-            var rowsInTable = table.rows.length;
-            var height = 0;
-            if (rowsInTable > maxRows) {
-                for (var i = 0; i < maxRows; i++) {
-                    height += table.rows[i].clientHeight;
-                }
-                wrapper.style.height = height + "px";
-            }
+            wrapper.style.height = height + "px";
         }
-    </script>
-</head>
+    }
+</script>
 
-<body>
-    <br />
-    <table id="myTable2" class="table">
-        <tr>
-            <th>@Lang["col_customer_name"]</th>
-            <th>@Lang["col_manufacturer"]</th>
-            <th>@Lang["col_model"]</th>
-            <th>@Lang["col_year"]</th>
-            <th>@Lang["col_engine"]</th>
-            <th>@Lang["col_mileage"]</th>
-            <th></th>
-        </tr>
-    </table>
-</body>
+<br />
 
-<body onload="makeTableScroll();">
-    <div class="scrollingTable">
-        <table id="myTable" class="table">
+<div class="scrollingTable">
+    <table id="myTable" class="table">
+        <thead>
+            <tr>
+                <th>@Lang["col_customer_name"]</th>
+                <th>@Lang["col_manufacturer"]</th>
+                <th>@Lang["col_model"]</th>
+                <th>@Lang["col_year"]</th>
+                <th>@Lang["col_engine"]</th>
+                <th>@Lang["col_mileage"]</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.CustomerData.Name)</td>
-                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Manufacturer)</td>
-                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Model)</td>
-                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Year)</td>
-                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.EngineType)</td>
-                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Mileage)</td>
+                    <td>@item.CustomerData.Name</td>
+                    <td style="text-align:center;">@item.Manufacturer</td>
+                    <td style="text-align:center;">@item.Model</td>
+                    <td style="text-align:center;">@item.Year</td>
+                    <td style="text-align:center;">@item.EngineType</td>
+                    <td style="text-align:center;">@item.Mileage</td>
 
-                    <td style="text-align: center; width:200px;">
+                    <td style="text-align:center; width:200px;">
                         @Html.ActionLink(
                             Lang["btn_edit"].ToString(),
                             "Edit",
@@ -143,16 +140,13 @@
                             new { id = item.CarId },
                             new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" }
                         )
-
-                        @*@Html.ActionLink(
-                            Lang["btn_delete"].ToString(),
-                            "Delete",
-                            new { id = item.CarId },
-                            new { @class = "btn btn-danger btn-sm", style = "margin-left: 6px;" }
-                        )*@
-                    </td> 
+                    </td>
                 </tr>
             }
-        </table>
-    </div>
-</body>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    makeTableScroll();
+</script>

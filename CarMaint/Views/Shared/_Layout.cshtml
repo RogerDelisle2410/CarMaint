@@ -26,30 +26,32 @@
             overflow: hidden;
         }
 
-        /* NAVBAR ALIGNMENT FIX */
-        .navbar-content {
-            width: 100%;
-            padding-left: 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* NAVBAR */
+        .navbar-title {
+            color: black !important;
+            font-size: 26px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: default;
         }
 
+        /* LANGUAGE + HELP */
         .language-select {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 15px;
         }
 
             .language-select label {
-                display: flex;
+                display: inline-flex;
                 align-items: center;
                 gap: 5px;
                 cursor: pointer;
+                font-weight: bold;
             }
 
         .help-button {
-            background-color: #007bff; /* Bootstrap blue */
+            background-color: #007bff;
             color: white;
             width: 35px;
             height: 35px;
@@ -61,14 +63,14 @@
             line-height: 35px;
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-            margin-right: 20px;
             margin-left: 25px;
         }
 
             .help-button:hover {
-                background-color: #0069d9; /* darker blue */
+                background-color: #0069d9;
             }
 
+        /* HELP MODAL */
         .help-modal {
             display: none;
             position: fixed;
@@ -83,34 +85,18 @@
         .help-content {
             background: white;
             width: 400px;
-            max-width: 4000px;
-            height: 250px;
             padding: 15px;
             margin: 60px auto;
             border-radius: 12px;
-            text-align: left; /* ⭐ optional: looks better in narrow boxes */
-            overflow-y: auto;
-            /* ⭐ Force narrow wrapping */
-            word-wrap: break-word;
+            text-align: left;
             overflow-wrap: break-word;
-            hyphens: auto;
-            display: block; /* ⭐ ensures width rules apply */
         }
-
-            .help-content p {
-                width: 300px;
-                margin: 0 auto;
-                text-align: left;
-            }
 
             .help-content h3 {
                 margin-bottom: 20px;
                 font-size: 18px;
                 border-bottom: 2px solid #007bff;
                 padding-bottom: 10px;
-                width: 300px;
-                margin-left: auto;
-                margin-right: auto;
             }
 
         .close-help {
@@ -121,28 +107,6 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-        }
-
-
-        .nav-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-right: 50px;
-        }
-
-        .navbar-brand {
-            margin-left: -10px;
-        }
-
-        .navbar-title {
-            color: black !important;
-            font-size: 26px; /* bigger */
-            font-weight: bold;
-            text-decoration: none;
-            cursor: default; /* not clickable */
-            display: inline-block;
-            margin: 0 auto;
         }
     </style>
 </head>
@@ -166,15 +130,13 @@
             var action = ViewContext.RouteData.Values["action"].ToString();
             bool isHome = controller == "Home" && action == "Index";
 
-            string navTitle = Lang["nav_home"].ToString();   // Car Maintenance Project
+            string navTitle = Lang["nav_home"].ToString();
         }
 
-        @* ============================
-            ONE ROW: LEFT / CENTER / RIGHT
-            ============================ *@
+        <!-- NAVBAR: LEFT / CENTER / RIGHT -->
         <div style="width:100%; display:flex; align-items:center; padding:10px 20px;">
 
-            @* LEFT: Main Menu button (not on Home) *@
+            <!-- LEFT -->
             <div style="flex:1; text-align:left; padding-left:50px;">
                 @if (!isHome)
                 {
@@ -184,28 +146,34 @@
                 }
             </div>
 
-            @* CENTER: Title *@
+            <!-- CENTER -->
             <div style="flex:1; text-align:center;">
                 <span class="navbar-title">@navTitle</span>
             </div>
 
-            @* RIGHT: Language + Help *@
+            <!-- RIGHT -->
             <div style="flex:1; text-align:right;">
-                <div class="language-select" style="display:inline-flex; gap:15px;">
+                <div class="language-select">
 
                     <label>
-                        <input type="radio" name="lang" value="en" onclick="changeLang('en')" @(lang == "en" ? "checked" : "")>
-                        <span id="label-en">English</span>
+                        <input type="radio" name="lang" value="en"
+                               onclick="changeLang('en')"
+                               @(lang == "en" ? "checked=\"checked\"" : "") />
+                        English
                     </label>
 
                     <label>
-                        <input type="radio" name="lang" value="fr" onclick="changeLang('fr')" @(lang == "fr" ? "checked" : "")>
-                        <span id="label-fr">Français</span>
+                        <input type="radio" name="lang" value="fr"
+                               onclick="changeLang('fr')"
+                               @(lang == "fr" ? "checked=\"checked\"" : "") />
+                        Français
                     </label>
 
                     <label>
-                        <input type="radio" name="lang" value="es" onclick="changeLang('es')" @(lang == "es" ? "checked" : "")>
-                        <span id="label-es">Español</span>
+                        <input type="radio" name="lang" value="es"
+                               onclick="changeLang('es')"
+                               @(lang == "es" ? "checked=\"checked\"" : "") />
+                        Español
                     </label>
 
                 </div>
@@ -216,6 +184,8 @@
         </div>
 
     </div>
+
+    <!-- HELP MODAL -->
     <div id="helpModal" class="help-modal">
         <div class="help-content">
             <h3 id="helpTitle"></h3>
@@ -224,18 +194,12 @@
         </div>
     </div>
 
-
-
     <script>
         function changeLang(lang) {
-            // Save language in a cookie
             document.cookie = "lang=" + lang + "; path=/";
-
-            // Reload page so MVC can load the correct JSON file
             location.reload();
         }
     </script>
-
 
     @if (isHome)
     {

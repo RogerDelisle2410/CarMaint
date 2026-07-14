@@ -186,8 +186,6 @@
   "year_required": "El año es obligatorio.",
   "enginetype_required": "El tipo de motor es obligatorio.",
   "mileage_required": "El kilometraje es obligatorio.",
-  "fuel_required": "Debe seleccionar al menos un tipo de combustible."
-
-
+  "fuel_required": "Debe seleccionar al menos un tipo de combustible." 
 
 }

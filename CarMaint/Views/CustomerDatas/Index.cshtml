@@ -43,63 +43,60 @@
         null,
         new { @class = "btn-menu" }
     )
-</p>
-@*<p>
-    @Html.ActionLink(Lang["cust_create_new"].ToString(), "Create")
-</p>*@
-
-<style type="text/css">
-    table {
-        width: 97%;
-        table-layout: fixed;
-        align-content: center;
-    }
-
-    td {
-        border: 1px solid black;
-    }
-
-    .scrollingTable {
-        width: 1200px;
-        overflow-y: auto;
-    }
-    .btn-menu {
-        display: inline-block;
-        padding: 6px 12px; /* smaller padding */
-        background: #f2f2f2;
-        border: 1px solid #ccc;
-        border-radius: 4px; /* slightly smaller radius */
-        font-weight: bold;
-        font-size: 12px; /* smaller text */
-        color: #333;
-        text-decoration: none;
-        transition: 0.15s ease-in-out;
-    }
-
-        .btn-menu:hover {
-            background: #e6e6e6;
-            border-color: #999;
-            cursor: pointer;
+</p> 
+<head>
+    <style type="text/css">
+        table {
+            width: 97%;
+            table-layout: fixed;
+            align-content: center;
         }
 
-</style>
+        td {
+            border: 1px solid black;
+        }
 
-<script type="text/javascript">
-    function makeTableScroll() {
-        var maxRows = 10;
-        var table = document.getElementById('myTable');
-        var wrapper = table.parentNode;
-        var rowsInTable = table.rows.length;
-        var height = 0;
-        if (rowsInTable > maxRows) {
-            for (var i = 0; i < maxRows; i++) {
-                height += table.rows[i].clientHeight;
+        .scrollingTable {
+            width: 1200px;
+            overflow-y: auto;
+        }
+
+        .btn-menu {
+            display: inline-block;
+            padding: 6px 12px; /* smaller padding */
+            background: #f2f2f2;
+            border: 1px solid #ccc;
+            border-radius: 4px; /* slightly smaller radius */
+            font-weight: bold;
+            font-size: 12px; /* smaller text */
+            color: #333;
+            text-decoration: none;
+            transition: 0.15s ease-in-out;
+        }
+
+            .btn-menu:hover {
+                background: #e6e6e6;
+                border-color: #999;
+                cursor: pointer;
             }
-            wrapper.style.height = height + "px";
-        }
-    }
-</script>
+    </style>
 
+    <script type="text/javascript">
+        function makeTableScroll() {
+            var maxRows = 10;
+            var table = document.getElementById('myTable');
+            var wrapper = table.parentNode;
+            var rowsInTable = table.rows.length;
+            var height = 0;
+            if (rowsInTable > maxRows) {
+                for (var i = 0; i < maxRows; i++) {
+                    height += table.rows[i].clientHeight;
+                }
+                wrapper.style.height = height + "px";
+            }
+        }
+    </script>
+</head>
 <body onload="makeTableScroll();">
     <div class="scrollingTable">
         <table id="myTable" class="table">
@@ -129,7 +126,7 @@
                             new { id = item.CustomerId },
                             new { @class = "btn btn-success btn-sm" }
                         )
-                    </td>  
+                    </td>
 
                     <td style="text-align: center;">
                         @Html.ActionLink(
@@ -147,11 +144,11 @@
                         )
 
                         @*@Html.ActionLink(
-                            Lang["btn_delete"].ToString(),
-                            "Delete",
-                            new { id = item.CustomerId },
-                            new { @class = "btn btn-danger btn-sm", style = "margin-left: 6px;" }
-                        )*@
+                                Lang["btn_delete"].ToString(),
+                                "Delete",
+                                new { id = item.CustomerId },
+                                new { @class = "btn btn-danger btn-sm", style = "margin-left: 6px;" }
+                            )*@
                     </td>
 
                 </tr>

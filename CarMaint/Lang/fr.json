@@ -185,10 +185,6 @@
   "year_required": "L'année est requise.",
   "enginetype_required": "Le type de moteur est requis.",
   "mileage_required": "Le kilométrage est requis.",
-  "fuel_required": "Vous devez sélectionner au moins un type de carburant."
-
-
-
-
+  "fuel_required": "Vous devez sélectionner au moins un type de carburant." 
 
 }

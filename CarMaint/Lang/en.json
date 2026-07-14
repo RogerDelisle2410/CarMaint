@@ -166,12 +166,7 @@
   "Actions": "Actions",
 
   "help_title": "What does this app do?",
-  "help_text": "This application lets you manage cars, customers, maintenance types, and maintenance history. You can add, edit, delete, and search maintenance records, track costs, and view detailed information for each vehicle and customer.",
-
-  "taskname_en_required": "TaskName_EN is required.",
-  "taskname_fr_required": "TaskName_FR is required.",
-  "taskname_es_required": "TaskName_ES is required.",
-  "cost_required": "Cost is required.",
+  "help_text": "This application lets you manage cars, customers, maintenance types, and maintenance history. You can add, edit, delete, and search maintenance records, track costs, and view detailed information for each vehicle and customer.", 
 
   "customerid_required": "CustomerId is required.",
   "name_required": "Name is required.",
@@ -185,9 +180,10 @@
   "year_required": "Year is required.",
   "enginetype_required": "Engine type is required.",
   "mileage_required": "Mileage is required.",
-  "fuel_required": "You must select at least one fuel type.", 
+  "fuel_required": "You must select at least one fuel type.",
 
-
-
-
-}
+  "taskname_en_required": "TaskName_EN is required.",
+  "taskname_fr_required": "TaskName_FR is required.",
+  "taskname_es_required": "TaskName_ES is required.",
+  "cost_required": "Cost is required."
+} 

@@ -20,5 +20,4 @@
         if (!modal) return;
         modal.style.display = "none";
     };
-
 });

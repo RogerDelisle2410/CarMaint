@@ -6,7 +6,7 @@
 
         let lang = document.cookie.replace(/(?:(?:^|.*;\s*)lang\s*\=\s*([^;]*).*$)|^.*$/, "$1") || "en";
 
-        fetch(`/Lang/${lang}.json`)
+        fetch(`${window.appRoot}Lang/${lang}.json`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById("helpTitle").innerText = data.help_title;

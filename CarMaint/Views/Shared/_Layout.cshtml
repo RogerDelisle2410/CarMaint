@@ -10,7 +10,13 @@
     @Scripts.Render("~/bundles/jquery")
     <script src="~/Scripts/help.js"></script>
 
+    <!-- ⭐ ADD THIS HERE -->
+    <script>
+        window.appRoot = '@Url.Content("~/")';
+    </script>
+
     @RenderSection("scripts", required: false)
+
 
     <style>
         .body-wrapper {

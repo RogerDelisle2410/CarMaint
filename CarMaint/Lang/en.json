@@ -36,6 +36,8 @@
   "col_customer_name": "Customer Name",
   "col_diesel": "Diesel",
   "col_electric": "Electric",
+  "col_hybrid": "Hybrid",
+  "col_turbo": "Turbo",
   "col_engine": "Engine Type",
   "col_engine_type": "Engine Type",
   "col_gas": "Gas",

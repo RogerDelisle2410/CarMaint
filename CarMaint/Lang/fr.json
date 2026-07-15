@@ -44,6 +44,7 @@
   "col_hist_date": "Date",
   "col_hist_manufacturer": "Fabricant",
   "col_hist_task": "Nom de la Tâche",
+  "col_hybrid": "Hybride",
   "col_maint_id": "ID",
   "col_manufacturer": "Fabricant",
   "col_mileage": "Kilométrage",
@@ -56,6 +57,7 @@
   "col_task_name": "Type de service",
   "col_taskname": "Nom de la tâche",
   "col_total": "Total :",
+  "col_turbo": "Turbo",
   "col_type": "Type de service",
   "col_year": "Année",
   "cost": "Coût",
@@ -102,6 +104,7 @@
   "hist_search": "Rechercher",
   "hist_title": "Historique d'Entretien",
   "hist_total_cost": "Coût Total",
+  "hybrid": "Hybride",
   "maint_create_new": "Créer Nouveau",
   "maint_find_by_task": "Rechercher par nom de tâche",
   "maint_id": "ID de maintenance",
@@ -146,6 +149,7 @@
   "ticket_select_vehicle": "Sélectionner le véhicule à entretenir",
   "ticket_title": "Ticket d'Entretien",
   "total": "Total :",
+  "turbo": "Turbo",
   "type": "Type",
   "type_of_maintenance": "Type d’entretien",
   "veh_create_new": "Créer Nouveau",
@@ -153,7 +157,5 @@
   "veh_search": "Rechercher",
   "veh_title": "Informations sur le Véhicule",
   "year": "Année",
-  "year_required": "L'année est requise.",
-  "hybrid": "Hybrid",
-  "turbo": "Turbo"
+  "year_required": "L'année est requise."
 }

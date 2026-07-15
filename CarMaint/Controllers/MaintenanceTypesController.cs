@@ -144,15 +144,13 @@ namespace CarMaint.Controllers
 
             // At least one fuel type must be selected
             if (!item.Gas &&
-    !item.Diesel &&
-    !item.Electric &&
-    !item.Hybrid &&
-    !item.Turbo)
+                !item.Diesel &&
+                !item.Electric &&
+                !item.Hybrid &&
+                !item.Turbo)
             {
                 ModelState.AddModelError("Gas", Lang["fuel_required"].ToString());
-            }
-
-
+            } 
 
             if (!ModelState.IsValid)
                 return View(item);
@@ -169,7 +167,8 @@ namespace CarMaint.Controllers
             dbItem.Gas = item.Gas;
             dbItem.Diesel = item.Diesel;
             dbItem.Electric = item.Electric;
-
+            dbItem.Hybrid = item.Hybrid;
+            dbItem.Turbo = item.Turbo;
             db.SaveChanges();
             return RedirectToAction("Index");
         }

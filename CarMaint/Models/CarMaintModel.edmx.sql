@@ -74,6 +74,8 @@ CREATE TABLE [dbo].[MaintenanceTypes] (
     [Gas] bit NOT NULL,
     [Diesel] bit NOT NULL,
     [Electric] bit NOT NULL,
+    [Hybrid] bit NOT NULL,
+    [Turbo] bit NOT NULL,
     [TaskName_FR] nvarchar(200) NOT NULL,
     [TaskName_ES] nvarchar(200) NOT NULL
 );

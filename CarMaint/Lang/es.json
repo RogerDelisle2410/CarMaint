@@ -157,5 +157,11 @@
   "veh_search": "Buscar",
   "veh_title": "Información del Vehículo",
   "year": "Año",
-  "year_required": "El año es obligatorio."
+  "year_required": "El año es obligatorio.",
+
+  "car_required": "El auto es obligatorio.",
+  "task_required": "La tarea es obligatoria.",
+  "customer_required": "El cliente es obligatorio.",
+  "date_required": "La fecha es obligatoria." 
+
 }

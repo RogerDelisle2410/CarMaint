@@ -82,75 +82,94 @@
             wrapper.style.height = height + "px";
         }
     }
+    function getRow(cb) {
 
-    function getRow(n) {
-        var row = n.parentNode.parentNode;
-        var cols = row.getElementsByTagName("td");
+        // Get the clicked row
+        const row = cb.closest("tr");
 
-        var maintid = parseInt(cols[0].innerText);
-        var idx = $.inArray(maintid, orderArray);
+        // Extract values from the hidden + visible cells
+        const maintid = parseInt(row.querySelector(".maint-id").textContent.trim());
+        const type = row.children[1].textContent.trim();
+        const cost = parseFloat(row.children[2].textContent.trim()).toFixed(2);
 
+        // Check if already selected
+        const idx = orderArray.indexOf(maintid);
+
+        // ============================
+        // ADD ROW
+        // ============================
         if (idx === -1) {
+
             orderArray.push(maintid);
+
+            // Show summary UI
             $("#HeaderTable").show();
             $("#MainTable").show();
             $("#SummaryBar").show();
 
-            var table = document.getElementById("MainTable");
-            var newRow = table.insertRow(0);
+            // Create new summary row
+            const newRow = document.createElement("tr");
 
-            var cell1 = newRow.insertCell(0); // maint id
-            var cell2 = newRow.insertCell(1); // type
-            var cell3 = newRow.insertCell(2); // cost
+            newRow.innerHTML = `
+            <td style="display:none;">
+                <span class="maint-id">${maintid}</span>
+            </td>
 
-            cell1.innerHTML = maintid;
-            cell2.innerHTML = cols[1].innerText;
-            cell3.innerHTML = parseFloat(cols[2].innerText).toFixed(2);
+            <td>${type}</td>
 
-            cell3.style.width = "80px";
-            cell3.style.textAlign = "right";
-            cell3.style.whiteSpace = "nowrap";
+            <td style="text-align:right; white-space:nowrap;">
+                ${cost}
+            </td>
+        `;
 
-            var sum = 0;
-            var cells = document.querySelectorAll("#MainTable tr td:last-child");
-            cells.forEach(function (c) {
-                sum += parseFloat(c.innerText);
-            });
-            $("#TableFooter").show();
-            $("#aTotal").text(sum.toFixed(2));
+            document.getElementById("MainTable").prepend(newRow);
 
+            updateTotal();
         }
+
+        // ============================
+        // REMOVE ROW
+        // ============================
         else {
+
             orderArray.splice(idx, 1);
 
-            var table = document.getElementById("MainTable");
-            var cells = table.getElementsByTagName("td");
+            const table = document.getElementById("MainTable");
+            const rows = table.querySelectorAll("tr");
 
-            for (var x = 0; x < cells.length; x++) {
-                if (cells[x].innerText == maintid) {
-                    var r = cells[x].parentNode;
-                    r.parentNode.removeChild(r);
-                    break;
+            rows.forEach(r => {
+                const idCell = r.querySelector(".maint-id");
+                if (idCell && parseInt(idCell.textContent) === maintid) {
+                    r.remove();
                 }
-            }
-
-            var sum = 0;
-            var cells2 = document.querySelectorAll("#MainTable tr td:last-child");
-
-            cells2.forEach(function (c) {
-                sum += parseFloat(c.innerText);
             });
 
-            $("#aTotal").text(sum.toFixed(2));
+            updateTotal();
 
             if (orderArray.length === 0) {
                 $("#HeaderTable").hide();
                 $("#MainTable").hide();
-                $("#TableFooter").hide();
-                $("#theButton").hide();
+                $("#SummaryBar").hide();
             }
         }
-    }
+    } 
+
+    // =====================================
+    // TOTAL CALCULATION (clean + bulletproof)
+    // =====================================
+    function updateTotal() {
+
+        let sum = 0;
+
+        const costCells = document.querySelectorAll("#MainTable tr td:last-child");
+
+        costCells.forEach(c => {
+            const val = parseFloat(c.textContent);
+            if (!isNaN(val)) sum += val;
+        });
+
+        $("#aTotal").text(sum.toFixed(2));
+    } 
 
     function proceed() {
         if (orderArray.length > 0) {
@@ -211,13 +230,24 @@
 </table>
 
 <div class="row" onload="makeTableScroll();">
+
+    <!-- ========================= -->
+    <!-- LEFT TABLE (MAIN LIST)   -->
+    <!-- ========================= -->
     <div class="table-responsive col-md-6">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="col-lg-1" style="border:none">@Lang["col_maint_id"]</th>
-                    <th class="col-lg-3" style="border:none">@Lang["col_task_name"]</th>
-                    <th class="col-lg-1" style="border:none">@Lang["col_cost"]</th>
+                    <th class="col-lg-1" style="border:none; display:none;">
+                        @Lang["col_maint_id"]
+                    </th>
+                    <th class="col-lg-3" style="border:none;">
+                        @Lang["col_task_name"]
+                    </th>
+                    <th class="col-lg-1" style="border:none;">
+                        @Lang["col_cost"]
+                    </th>
+                    <th class="col-lg-1" style="border:none;"></th>
                 </tr>
             </thead>
 
@@ -225,43 +255,57 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td class="col-lg-1" style="text-align:center; vertical-align:middle;">
-                            @item.MaintId
+                        <td class="col-lg-1" style="display:none;">
+                            <span class="maint-id">@item.MaintId</span>
                         </td>
 
-                        <td class="col-lg-3">
-                            @item.TaskName   <!-- TRANSLATED VALUE -->
-                        </td>
+                        <td class="col-lg-3">@item.TaskName</td>
 
-                        <td class="col-lg-1" style="text-align:right; vertical-align:middle;">
+                        <td class="col-lg-1" style="text-align:right;">
                             @string.Format("{0:0.00}", Convert.ToDecimal(item.Cost))
                         </td>
 
-                        <td class="col-lg-1" style="text-align:center; vertical-align:middle;">
-                            <input type="checkbox" name="test" value="1" onclick="getRow(this)" />
+                        <td class="col-lg-1" style="text-align:center;">
+                            <input type="checkbox" onclick="getRow(this)" />
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+
     </div>
 
+
+
+    <!-- ========================= -->
+    <!-- RIGHT TABLE (SUMMARY)     -->
+    <!-- ========================= -->
     <div class="table-responsive col-md-6">
 
-        <!-- ⭐ SUMMARY TABLE ⭐ -->
         <table id="HeaderTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th class="col-lg-1" style="border:none">@Lang["col_maint_id"]</th>
-                    <th class="col-lg-2" style="border:none">@Lang["col_type"]</th>
-                    <th class="col-lg-1" style="border:none">@Lang["col_cost"]</th>
-
+                    <th class="col-lg-1" style="border:none; display:none;">
+                        @Lang["col_maint_id"]
+                    </th>
+                    <th class="col-lg-2" style="border:none;">
+                        @Lang["col_type"]
+                    </th>
+                    <th class="col-lg-1" style="border:none;">
+                        @Lang["col_cost"]
+                    </th>
                 </tr>
             </thead>
 
             <tbody id="MainTable"></tbody>
         </table>
 
+
+
+
+        <!-- ========================= -->
+        <!-- SUMMARY BAR               -->
+        <!-- ========================= -->
         <div id="SummaryBar" style="display:none; margin-bottom:10px;">
 
             <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0;">
@@ -276,11 +320,12 @@
 
                 <!-- Total -->
                 <div style="font-size:18px; font-weight:bold;">
-                    @Lang["col_total"] $ <span id="aTotal"> 0.00</span>
+                    @Lang["col_total"] $ <span id="aTotal">0.00</span>
                 </div>
             </div>
 
             <hr style="margin:8px 0;" />
         </div>
+
     </div>
 </div>

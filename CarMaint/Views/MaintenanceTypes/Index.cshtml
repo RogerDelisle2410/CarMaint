@@ -43,7 +43,7 @@
 
 <style>
     table {
-        width: 97%;
+        width: 65%;
         table-layout: fixed;
         margin: 0 auto;
     }
@@ -101,45 +101,45 @@
             wrapper.style.height = height + "px";
         }
     }
-</script> 
+</script>
 
-<table id="myTable2" class="table">
+<table id="myTable2" class="table" style="width: 75%;">
     <tr>
-        <th>@Lang["col_taskname"]</th>
-        <th>@Lang["col_cost"]</th>
-        <th>@Lang["col_gas"]</th>
-        <th>@Lang["col_diesel"]</th>
-        <th>@Lang["col_electric"]</th>
-        <th>@Lang["col_hybrid"]</th>
-        <th>@Lang["col_turbo"]</th>
+        <th style="width:200px;">@Lang["col_taskname"]</th>
+        <th style="width:100px;">@Lang["col_cost"]</th>
+        <th style="width:75px;">@Lang["col_gas"]</th>
+        <th style="width:75px;">@Lang["col_diesel"]</th>
+        <th style="width:75px;">@Lang["col_electric"]</th>
+        <th style="width:75px;">@Lang["col_hybrid"]</th>
+        <th style="width:75px;">@Lang["col_turbo"]</th>
         <th></th>
     </tr>
 </table>
 
 <div class="scrollingTable">
-    <table id="myTable" class="table">
+    <table id="myTable" class="table " style="width: 75%;">
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td style="width:200px;">
                     @(lang == "fr" ? item.TaskName_FR :
                       lang == "es" ? item.TaskName_ES :
                       item.TaskName_EN)
                 </td>
 
-                <td style="text-align:right;">
+                <td style="text-align:right; width:100px;">
                     @string.Format("{0:c}", Convert.ToDecimal(item.Cost))
                 </td>
-                <td style="text-align:center;">@Html.DisplayFor(modelItem => item.Gas)</td>
-                <td style="text-align:center;">@Html.DisplayFor(modelItem => item.Diesel)</td>
-                <td style="text-align:center;">@Html.DisplayFor(modelItem => item.Electric)</td>
-                <td style="text-align:center;">@Html.DisplayFor(modelItem => item.Hybrid)</td>
-                <td style="text-align:center;">@Html.DisplayFor(modelItem => item.Turbo)</td> 
+                <td style="text-align: center; width: 75px;">@Html.DisplayFor(modelItem => item.Gas)</td>
+                <td style="text-align: center; width: 75px;">@Html.DisplayFor(modelItem => item.Diesel)</td>
+                <td style="text-align: center; width: 75px;">@Html.DisplayFor(modelItem => item.Electric)</td>
+                <td style="text-align: center; width: 75px;">@Html.DisplayFor(modelItem => item.Hybrid)</td>
+                <td style="text-align: center; width: 75px;">@Html.DisplayFor(modelItem => item.Turbo)</td>
 
-            <td style="text-align: center;">
-                @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.MaintId }, new { @class = "btn btn-primary btn-sm" })
-                @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.MaintId }, new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" })
-            </td>
+                <td style="text-align: center;  ">
+                    @Html.ActionLink(Lang["btn_edit"].ToString(), "Edit", new { id = item.MaintId }, new { @class = "btn btn-primary btn-sm" })
+                    @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.MaintId }, new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" })
+                </td>
             </tr>
         }
     </table>

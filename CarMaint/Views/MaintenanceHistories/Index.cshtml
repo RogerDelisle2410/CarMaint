@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CarMaint.Models.MaintenanceHistory>
 @using Newtonsoft.Json.Linq
 
-@{ 
+@{
     string lang = "en";
     if (Request.Cookies["lang"] != null)
     {
@@ -69,71 +69,74 @@
     }
 </style>
 
-<!-- Header -->
-<table class="table mh-table-header" style="width:97%; margin:0 auto;">
-    <tr>
-        <th>@Lang["col_hist_customer"]</th>
-        <th>@Lang["col_hist_manufacturer"]</th>
-        <th>@Lang["col_hist_task"]</th>
-        <th>@Lang["col_hist_date"]</th>
-        <th>@Lang["col_hist_cost"]</th>
-        <th></th>
-    </tr>
-</table>
+<div class="table-responsive" style="width:65%; margin:0 auto;">
 
-<!-- Scrollable body -->
-<div class="mh-scroll" style="width:97%; margin:0 auto;">
-    <table class="table mh-table">
-        @foreach (var group in Model.GroupBy(p => p.CustId))
-        {
-            foreach (var item in group)
+    <table class="table " style="margin:0; table-layout:fixed; width:100%;">
+
+        <!-- FIXED HEADER -->
+        <thead class="mh-table-header" style="display:table; width:100%; table-layout:fixed;">
+            <tr style="display:table; width:100%; table-layout:fixed;">
+                <th style="width:20%;">@Lang["col_hist_customer"]</th>
+                <th style="width:20%;">@Lang["col_hist_manufacturer"]</th>
+                <th style="width:20%;">@Lang["col_hist_task"]</th>
+                <th style="width:20%;">@Lang["col_hist_date"]</th>
+                <th style="width:20%;">@Lang["col_hist_cost"]</th>
+            </tr>
+        </thead>
+
+        <!-- SCROLLABLE BODY -->
+        <tbody class="mh-scroll" style="display:block; max-height:420px; overflow-y:auto; width:100%;">
+            @foreach (var group in Model.GroupBy(p => p.CustId))
             {
-                <tr>
-                    <td>@item.CustomerData.Name</td>
-                    <td class="text-center">@item.CarData.Manufacturer</td>
-                    <td class="text-center">@item.MaintenanceType.TaskName_EN</td>
-                    <td class="text-end">@item.Date.ToShortDateString()</td>
-                    <td class="text-end">@string.Format("{0:c}", item.Cost)</td>
+                foreach (var item in group)
+                {
+                    <tr style="display:table; width:100%; table-layout:fixed;">
+                        <td style="width:20%;">@item.CustomerData.Name</td>
+                        <td style="width:20%;" class="text-center">@item.CarData.Manufacturer</td>
+                        <td style="width:20%;" class="text-center">
+                            @{
+                                string taskName = item.MaintenanceType.TaskName_EN;
 
-                    <td class="mh-actions text-center">
-                        @Html.ActionLink(
-                            Lang["btn_edit"].ToString(),
-                            "Edit",
-                            new { id = item.HistoryId },
-                            new { @class = "btn btn-sm btn-primary" }
-                        )
+                                if (lang == "fr")
+                                {
+                                    taskName = item.MaintenanceType.TaskName_FR;
+                                }
+                                else if (lang == "es")
+                                {
+                                    taskName = item.MaintenanceType.TaskName_ES;
+                                }
+                            }
+                            @taskName
+                        </td>
 
-                        @Html.ActionLink(
-                            Lang["btn_details"].ToString(),
-                            "Details",
-                            new { id = item.HistoryId },
-                            new { @class = "btn btn-sm btn-info" }
-                        )
+                        <td style="width:20%;" class="text-end">@item.Date.ToShortDateString()</td>
+                        <td style="width:20%;" class="text-end">@string.Format("{0:c}", item.Cost)</td>
+                    </tr>
+                }
+
+                <!-- GROUP TOTAL -->
+                <tr class="mh-total-row" style="display:table; width:100%; table-layout:fixed;">
+                    <td colspan="4" style="width:80%;"></td>
+                    <td style="width:20%;" class="text-end">
+                        @Lang["hist_total_cost"]: @string.Format("{0:c}", group.Sum(x => x.Cost))
                     </td>
                 </tr>
             }
+        </tbody>
 
-            <!-- Group total -->
-            <tr class="mh-total-row">
-                <td colspan="4"></td>
-                <td class="text-end">
-                    @Lang["hist_total_cost"]: @string.Format("{0:c}", group.Sum(x => x.Cost))
-                </td>
-                <td></td>
-            </tr>
-        }
     </table>
 </div>
 
-<!-- Grand total -->
-@if (ViewBag.Total > 0)
+
+<!-- GRAND TOTAL -->
+@*@if (ViewBag.Total > 0)
 {
-    <table class="table" style="width:97%; margin:0 auto;">
-        <tr class="mh-total-row">
+    <table class="table mh-total-row" style="width:97%; margin:0 auto;">
+        <tr>
             <td colspan="4"></td>
             <td class="text-end">
                 @Lang["hist_total_cost"]: @(((decimal)ViewBag.Total).ToString("C2"))
             </td>
         </tr>
     </table>
-}
+}*@

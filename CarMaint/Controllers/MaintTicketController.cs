@@ -76,7 +76,6 @@ namespace CarMaint.Controllers
 
             return View(car.ToList().OrderBy(t => t.Manufacturer));
         }
-
         public ActionResult SelectCar(string engineType, int carId)
         {
             var car = db.CarDatas.Where(ca => ca.CarId == carId);
@@ -92,33 +91,95 @@ namespace CarMaint.Controllers
 
             var maint = db.MaintenanceTypes.AsQueryable();
 
+            // Normalize engine type
+            engineType = (engineType ?? "").Trim();
+
+            // ================================
+            // FIXED ENGINE FILTERING LOGIC
+            // ================================
             switch (engineType)
             {
-                case "Gas":
-                    maint = maint.Where(ma => ma.Gas == true);
+                case "Hybrid":
+                    // Hybrid cars still have engines → Gas tasks apply
+                    // Hybrid cars also have electric systems → Electric tasks apply
+                    // Hybrid-specific tasks also apply
+                    maint = maint.Where(ma => ma.Gas == true
+                                           || ma.Electric == true
+                                           || ma.Hybrid == true);
                     break;
+
+                case "Turbo":
+                    // Turbo cars are gas engines → Gas tasks apply
+                    // Turbo-specific tasks also apply
+                    maint = maint.Where(ma => ma.Gas == true
+                                           || ma.Turbo == true);
+                    break;
+
                 case "Diesel":
                     maint = maint.Where(ma => ma.Diesel == true);
                     break;
+
                 case "Electric":
                     maint = maint.Where(ma => ma.Electric == true);
                     break;
-                case "Hybrid":
-                    maint = maint.Where(ma => ma.Hybrid == true);
-                    break;
-                case "Turbo":
-                    maint = maint.Where(ma => ma.Turbo == true);
+
+                default: // Gas
+                    maint = maint.Where(ma => ma.Gas == true);
                     break;
             }
 
-            // IMPORTANT: SQL cannot sort by TaskName (not a column)
-            // So we translate first, then sort in memory.
+            // Translate names BEFORE sorting
             var list = maint.ToList();
             ApplyTaskNameTranslation(list);
-            list = list.OrderBy(t => t.TaskName).ToList(); 
+
+            // Sort by translated name
+            list = list.OrderBy(t => t.TaskName).ToList();
 
             return View(list);
         }
+
+        //public ActionResult SelectCar(string engineType, int carId)
+        //{
+        //    var car = db.CarDatas.Where(ca => ca.CarId == carId);
+
+        //    foreach (var item in car)
+        //    {
+        //        Session["CarId"] = item.CarId;
+        //        Session["Manufacturer"] = item.Manufacturer;
+        //        Session["Model"] = item.Model;
+        //        Session["EngineType"] = item.EngineType;
+        //        Session["Year"] = item.Year;
+        //    }
+
+        //    var maint = db.MaintenanceTypes.AsQueryable();
+
+        //    switch (engineType)
+        //    {
+        //        case "Gas":
+        //            maint = maint.Where(ma => ma.Gas == true);
+        //            break;
+        //        case "Diesel":
+        //            maint = maint.Where(ma => ma.Diesel == true);
+        //            break;
+        //        case "Electric":
+        //            maint = maint.Where(ma => ma.Electric == true);
+        //            break;
+        //        case "Hybrid":
+        //            maint = maint.Where(ma => ma.Hybrid == true);
+        //            break;
+        //        case "Turbo":
+        //            maint = maint.Where(ma => ma.Turbo == true);
+        //            break;
+        //    }
+
+        //    // IMPORTANT: SQL cannot sort by TaskName (not a column)
+        //    // So we translate first, then sort in memory.
+        //    var list = maint.ToList();
+        //    ApplyTaskNameTranslation(list);
+        //    list = list.OrderBy(t => t.TaskName).ToList(); 
+
+        //    return View(list);
+        //}
 
         [HttpPost]
         public JsonResult AddToHistory(string[] arrayOfValues)

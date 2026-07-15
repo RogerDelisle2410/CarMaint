@@ -157,5 +157,11 @@
   "year": "Year",
   "year_required": "Year is required.",
   "hybrid": "Hybrid",
-  "turbo": "Turbo"
+  "turbo": "Turbo",
+
+  "car_required": "Car is required.",
+  "task_required": "Task is required.",
+  "customer_required": "Customer is required.",
+  "date_required": "Date is required."  
+
 } 

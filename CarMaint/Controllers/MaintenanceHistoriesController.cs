@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CarMaint.Models;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,13 +8,29 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using CarMaint.Models;
 
 namespace CarMaint.Controllers
 {
     public class MaintenanceHistoriesController : Controller
     {
         private readonly BCATPEntities1 db = new BCATPEntities1();
+        private JObject LoadLang()
+        {
+            string lang = Request.Cookies["lang"]?.Value ?? "en";
+
+            try
+            {
+                string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
+                string jsonText = System.IO.File.ReadAllText(jsonPath);
+                return JObject.Parse(jsonText);
+            }
+            catch
+            {
+                string fallbackPath = Server.MapPath("~/Lang/en.json");
+                string fallbackText = System.IO.File.ReadAllText(fallbackPath);
+                return JObject.Parse(fallbackText);
+            }
+        }
 
         // ---------------------------
         // LANGUAGE HELPER
@@ -127,38 +145,79 @@ namespace CarMaint.Controllers
             return View(new MaintenanceHistory());
         }
 
+
         // ---------------------------
         // POST: MaintenanceHistories/Create
         // ---------------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "HistoryId,CarId,MaintId,Date,CustId,Cost")] MaintenanceHistory history)
+        public ActionResult Create(
+    int CarId,
+    int MaintId,
+    string Date,
+    int CustId,
+    string Cost
+)
         {
-            if (ModelState.IsValid)
+            JObject Lang = LoadLang();
+
+            // ⭐ Manual multilingual validation
+            if (CarId <= 0)
+                ModelState.AddModelError("CarId", Lang["car_required"].ToString());
+
+            if (MaintId <= 0)
+                ModelState.AddModelError("MaintId", Lang["task_required"].ToString());
+
+            if (CustId <= 0)
+                ModelState.AddModelError("CustId", Lang["customer_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(Date))
+                ModelState.AddModelError("Date", Lang["date_required"].ToString());
+
+            DateTime parsedDate;
+            if (!DateTime.TryParse(Date, out parsedDate))
+                ModelState.AddModelError("Date", Lang["date_required"].ToString());
+
+            decimal parsedCost;
+            if (!decimal.TryParse(Cost, out parsedCost) || parsedCost <= 0)
+                ModelState.AddModelError("Cost", Lang["cost_required"].ToString());
+
+            if (!ModelState.IsValid)
             {
-                db.MaintenanceHistories.Add(history);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                string lang = GetLang();
+
+                var maintList = db.MaintenanceTypes.ToList();
+                foreach (var m in maintList)
+                {
+                    m.TaskName =
+                        lang == "fr" ? m.TaskName_FR :
+                        lang == "es" ? m.TaskName_ES :
+                        m.TaskName_EN;
+                }
+
+                ViewBag.MaintId = new SelectList(maintList, "MaintId", "TaskName", MaintId);
+                ViewBag.CustId = new SelectList(db.CustomerDatas, "CustomerId", "Name", CustId);
+                ViewBag.CarId = new SelectList(db.CarDatas, "CarId", "Manufacturer", CarId);
+
+                return View();
             }
 
-            // Rebuild dropdowns if validation fails
-            string lang = GetLang();
-
-            var maintList = db.MaintenanceTypes.ToList();
-            foreach (var m in maintList)
+            // ⭐ Map to EF entity
+            var history = new MaintenanceHistory
             {
-                m.TaskName =
-                    lang == "fr" ? m.TaskName_FR :
-                    lang == "es" ? m.TaskName_ES :
-                    m.TaskName_EN;
-            }
+                CarId = CarId,
+                MaintId = MaintId,
+                Date = parsedDate,
+                CustId = CustId,
+                Cost = parsedCost
+            };
 
-            ViewBag.MaintId = new SelectList(maintList, "MaintId", "TaskName", history.MaintId);
-            ViewBag.CustId = new SelectList(db.CustomerDatas, "CustomerId", "Name", history.CustId);
-            ViewBag.CarId = new SelectList(db.CarDatas, "CarId", "Manufacturer", history.CarId);
+            db.MaintenanceHistories.Add(history);
+            db.SaveChanges();
 
-            return View(history);
+            return RedirectToAction("Index");
         }
+
 
         // ---------------------------
         // GET: MaintenanceHistories/Edit/5
@@ -200,33 +259,71 @@ namespace CarMaint.Controllers
         // ---------------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "HistoryId,CarId,MaintId,Date,CustId,Cost")] MaintenanceHistory history)
+        public ActionResult Edit(
+    int HistoryId,
+    int CarId,
+    int MaintId,
+    string Date,
+    int CustId,
+    string Cost
+)
         {
-            if (ModelState.IsValid)
+            JObject Lang = LoadLang();
+
+            // ⭐ Manual multilingual validation
+            if (CarId <= 0)
+                ModelState.AddModelError("CarId", Lang["car_required"].ToString());
+
+            if (MaintId <= 0)
+                ModelState.AddModelError("MaintId", Lang["task_required"].ToString());
+
+            if (CustId <= 0)
+                ModelState.AddModelError("CustId", Lang["customer_required"].ToString());
+
+            if (string.IsNullOrWhiteSpace(Date))
+                ModelState.AddModelError("Date", Lang["date_required"].ToString());
+
+            DateTime parsedDate;
+            if (!DateTime.TryParse(Date, out parsedDate))
+                ModelState.AddModelError("Date", Lang["date_required"].ToString());
+
+            decimal parsedCost;
+            if (!decimal.TryParse(Cost, out parsedCost) || parsedCost <= 0)
+                ModelState.AddModelError("Cost", Lang["cost_required"].ToString());
+
+            if (!ModelState.IsValid)
             {
-                db.Entry(history).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                string lang = GetLang();
+
+                var maintList = db.MaintenanceTypes.ToList();
+                foreach (var m in maintList)
+                {
+                    m.TaskName =
+                        lang == "fr" ? m.TaskName_FR :
+                        lang == "es" ? m.TaskName_ES :
+                        m.TaskName_EN;
+                }
+
+                ViewBag.MaintId = new SelectList(maintList, "MaintId", "TaskName", MaintId);
+                ViewBag.CustId = new SelectList(db.CustomerDatas, "CustomerId", "Name", CustId);
+                ViewBag.CarId = new SelectList(db.CarDatas, "CarId", "Manufacturer", CarId);
+
+                return View();
             }
 
-            // Rebuild dropdowns if validation fails
-            string lang = GetLang();
+            // ⭐ Map back to EF entity
+            var history = db.MaintenanceHistories.Find(HistoryId);
 
-            var maintList = db.MaintenanceTypes.ToList();
-            foreach (var m in maintList)
-            {
-                m.TaskName =
-                    lang == "fr" ? m.TaskName_FR :
-                    lang == "es" ? m.TaskName_ES :
-                    m.TaskName_EN;
-            }
+            history.CarId = CarId;
+            history.MaintId = MaintId;
+            history.Date = parsedDate;
+            history.CustId = CustId;
+            history.Cost = parsedCost;
 
-            ViewBag.MaintId = new SelectList(maintList, "MaintId", "TaskName", history.MaintId);
-            ViewBag.CustId = new SelectList(db.CustomerDatas, "CustomerId", "Name", history.CustId);
-            ViewBag.CarId = new SelectList(db.CarDatas, "CarId", "Manufacturer", history.CarId);
-
-            return View(history);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
+
 
         // ---------------------------
         // GET: MaintenanceHistories/Delete/5

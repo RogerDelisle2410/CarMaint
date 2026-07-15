@@ -157,5 +157,11 @@
   "veh_search": "Rechercher",
   "veh_title": "Informations sur le Véhicule",
   "year": "Année",
-  "year_required": "L'année est requise."
+  "year_required": "L'année est requise.",
+
+  "car_required": "La voiture est requise.",
+  "task_required": "La tâche est requise.",
+  "customer_required": "Le client est requis.",
+  "date_required": "La date est requise." 
+
 }

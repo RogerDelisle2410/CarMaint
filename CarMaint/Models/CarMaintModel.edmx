@@ -55,11 +55,13 @@
           <Property Name="MaintId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TaskName_EN" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Cost" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Gas" Type="bit" Nullable="false" />
-          <Property Name="Diesel" Type="bit" Nullable="false" />
-          <Property Name="Electric" Type="bit" Nullable="false" />
+          <Property Name="Gas" Type="bit" />
+          <Property Name="Diesel" Type="bit" />
+          <Property Name="Electric" Type="bit" />
           <Property Name="TaskName_FR" Type="nvarchar" MaxLength="200" />
           <Property Name="TaskName_ES" Type="nvarchar" MaxLength="200" />
+          <Property Name="Hybrid" Type="bit" />
+          <Property Name="Turbo" Type="bit" />
         </EntityType>
         <Association Name="FK_CarData_CustomerData">
           <End Role="CustomerDatas" Type="Self.CustomerDatas" Multiplicity="1">
@@ -157,13 +159,15 @@
           </Key>
           <Property Name="MaintId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Cost" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Gas" Type="Boolean" Nullable="false" />
-          <Property Name="Diesel" Type="Boolean" Nullable="false" />
-          <Property Name="Electric" Type="Boolean" Nullable="false" />
+          <Property Name="Gas" Type="Boolean" />
+          <Property Name="Diesel" Type="Boolean" />
+          <Property Name="Electric" Type="Boolean" />
           <NavigationProperty Name="MaintenanceHistories" Relationship="Self.FK_MaintenanceHistory_MaintenanceType" FromRole="MaintenanceType" ToRole="MaintenanceHistory" />
           <Property Name="TaskName_EN" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TaskName_FR" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="TaskName_ES" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Hybrid" Type="Boolean" />
+          <Property Name="Turbo" Type="Boolean" />
         </EntityType>
         <Association Name="FK_MaintenanceHistory_MaintenanceType">
           <End Role="MaintenanceType" Type="Self.MaintenanceType" Multiplicity="1" />
@@ -292,7 +296,9 @@
     <EntitySetMapping Name="MaintenanceTypes">
       <EntityTypeMapping TypeName="IsTypeOf(BCATPModel.MaintenanceType)">
         <MappingFragment StoreEntitySet="MaintenanceTypes">
-          <ScalarProperty Name="TaskName_ES" ColumnName="TaskName_ES" />
+          <ScalarProperty Name="Turbo" ColumnName="Turbo" />
+                <ScalarProperty Name="Hybrid" ColumnName="Hybrid" />
+                <ScalarProperty Name="TaskName_ES" ColumnName="TaskName_ES" />
                 <ScalarProperty Name="TaskName_FR" ColumnName="TaskName_FR" />
                 <ScalarProperty Name="TaskName_EN" ColumnName="TaskName_EN" />
                 <ScalarProperty Name="MaintId" ColumnName="MaintId" />

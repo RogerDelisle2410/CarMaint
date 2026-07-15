@@ -51,7 +51,7 @@
   "col_name": "Name",
   "col_phone": "Phone",
   "col_postal": "Postal Code",
-  "col_select_customer": "Select Customer",
+  "col_select_customer": "Select",
   "col_select_vehicle": "Select Vehicle",
   "col_task_name": "Type of Service",
   "col_taskname": "Task Name",
@@ -153,5 +153,7 @@
   "veh_search": "Search",
   "veh_title": "Vehicle Info",
   "year": "Year",
-  "year_required": "Year is required."
+  "year_required": "Year is required.",
+  "hybrid": "Hybrid",
+  "turbo": "Turbo"
 } 

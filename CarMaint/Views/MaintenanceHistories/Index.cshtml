@@ -1,156 +1,139 @@
 ﻿@model IEnumerable<CarMaint.Models.MaintenanceHistory>
-
 @using Newtonsoft.Json.Linq
 
-@{
+@{ 
     string lang = "en";
     if (Request.Cookies["lang"] != null)
     {
         lang = Request.Cookies["lang"].Value;
     }
-
     JObject Lang;
 
     try
     {
         string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
-        string jsonText = System.IO.File.ReadAllText(jsonPath);
-        Lang = JObject.Parse(jsonText);
+        Lang = JObject.Parse(System.IO.File.ReadAllText(jsonPath));
     }
     catch
     {
-        // Fallback to English if Azure can't find the file
         string fallbackPath = Server.MapPath("~/Lang/en.json");
-        string fallbackText = System.IO.File.ReadAllText(fallbackPath);
-        Lang = JObject.Parse(fallbackText);
+        Lang = JObject.Parse(System.IO.File.ReadAllText(fallbackPath));
     }
 }
 
-
-<h2>@Lang["hist_title"]</h2>
+<h2 class="mb-4">@Lang["hist_title"]</h2>
 
 @using (Html.BeginForm())
 {
-    <p>
-        @Lang["hist_find_by_name"]: @Html.TextBox("SearchString")
-        <input type="submit" value="@Lang["hist_search"]" />
-    </p>
+    <div class="mb-3 d-flex align-items-center gap-3">
+        <label class="fw-bold">@Lang["hist_find_by_name"]:</label>
+        @Html.TextBox("SearchString", null, new { @class = "form-control fixed-input" })
+        <input type="submit" value="@Lang["hist_search"]" class="btn btn-primary" />
+    </div>
 }
 
-<head>
-    <style type="text/css">
-        table {
-            width: 90%;
-            table-layout: fixed;
+<style>
+    .mh-table-header th {
+        text-align: center;
+        font-weight: bold;
+        padding: 8px;
+        background-color: #f7f7f7;
+        border-bottom: 2px solid #ccc;
+    }
+
+    .mh-table td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .mh-scroll {
+        max-height: 420px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: white;
+    }
+
+    .mh-total-row {
+        background-color: #fafafa;
+        font-weight: bold;
+    }
+
+        .mh-total-row td {
+            padding: 8px;
+            border-top: 2px solid #ccc;
         }
 
-        td {
-            border: 1px solid black;
-        }
+    .mh-actions a {
+        margin-right: 6px;
+    }
+</style>
 
-        .scrollingTable {
-            width: 1150px;
-            overflow-y: auto;
-        }
-    </style>
+<!-- Header -->
+<table class="table mh-table-header" style="width:97%; margin:0 auto;">
+    <tr>
+        <th>@Lang["col_hist_customer"]</th>
+        <th>@Lang["col_hist_manufacturer"]</th>
+        <th>@Lang["col_hist_task"]</th>
+        <th>@Lang["col_hist_date"]</th>
+        <th>@Lang["col_hist_cost"]</th>
+        <th></th>
+    </tr>
+</table>
 
-    <script type="text/javascript">
-        function makeTableScroll() {
-            var maxRows = 9;
-            var table = document.getElementById('myTable');
-            var wrapper = table.parentNode;
-            var rowsInTable = table.rows.length;
-            var height = 0;
-            if (rowsInTable > maxRows) {
-                for (var i = 0; i < maxRows; i++) {
-                    height += table.rows[i].clientHeight;
-                }
-                wrapper.style.height = height + "px";
-            }
-        }
-    </script>
-</head>
-
-<body>
-    <br />
-    <table id="myTable2" class="table">
-        <tr>
-            <th>@Lang["col_hist_customer"]</th>
-            <th>@Lang["col_hist_manufacturer"]</th>
-            <th>@Lang["col_hist_task"]</th>
-            <th>@Lang["col_hist_date"]</th>
-            <th style="text-align:left;">@Lang["col_hist_cost"]</th>
-            <th></th>
-        </tr>
-    </table>
-</body>
-
-<body onload="makeTableScroll();">
-    <div class="scrollingTable">
-        <table id="myTable" class="table">
-
-            @foreach (var group in Model.GroupBy(p => p.CustId))
+<!-- Scrollable body -->
+<div class="mh-scroll" style="width:97%; margin:0 auto;">
+    <table class="table mh-table">
+        @foreach (var group in Model.GroupBy(p => p.CustId))
+        {
+            foreach (var item in group)
             {
-                foreach (var item in group)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.CustomerData.Name)</td>
-                        <td style="text-align: center;">@Html.DisplayFor(modelItem => item.CarData.Manufacturer)</td>
-                        <td style="text-align: center;">@Html.DisplayFor(modelItem => item.MaintenanceType.TaskName)</td>
-                        <td style="text-align: right;">@Html.DisplayFor(modelItem => item.Date)</td>
-                        <td style="text-align:right;">@string.Format("{0:c}", item.Cost)</td>
-
-                        <td style="text-align:center; width:200px;">
-                            @Html.ActionLink(
-                                Lang["btn_edit"].ToString(),
-                                "Edit",
-                                new { id = item.HistoryId },
-                                new { @class = "btn btn-sm btn-primary" }
-                            )
-
-                            @Html.ActionLink(
-                                Lang["btn_details"].ToString(),
-                                "Details",
-                                new { id = item.HistoryId },
-                                new { @class = "btn btn-sm btn-info", style = "margin-left:6px;" }
-                            )
-                        </td>
-
-                    </tr>
-                }
-
                 <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th style="text-align:right;   font-weight:bold;">
-                        @Lang["hist_total_cost"]: @string.Format("{0:c}", group.Sum(x => x.Cost))
-                    </th>
+                    <td>@item.CustomerData.Name</td>
+                    <td class="text-center">@item.CarData.Manufacturer</td>
+                    <td class="text-center">@item.MaintenanceType.TaskName_EN</td>
+                    <td class="text-end">@item.Date.ToShortDateString()</td>
+                    <td class="text-end">@string.Format("{0:c}", item.Cost)</td>
+
+                    <td class="mh-actions text-center">
+                        @Html.ActionLink(
+                            Lang["btn_edit"].ToString(),
+                            "Edit",
+                            new { id = item.HistoryId },
+                            new { @class = "btn btn-sm btn-primary" }
+                        )
+
+                        @Html.ActionLink(
+                            Lang["btn_details"].ToString(),
+                            "Details",
+                            new { id = item.HistoryId },
+                            new { @class = "btn btn-sm btn-info" }
+                        )
+                    </td>
                 </tr>
             }
 
-        </table>
-    </div>
-</body>
-
-<body>
-    <div>
-        <table id="myTable3">
-            <tr>
-                <th style="background-color:white"></th>
-                <th style="background-color:white"></th>
-                <th style="background-color:white"></th>
-
-                @if (ViewBag.Total > 0)
-                {
-                    <th style="background-color:white; text-align:right;">
-                        @Lang["hist_total_cost"]:
-                        @(((decimal)ViewBag.Total).ToString("C2"))
-                    </th>
-                }
+            <!-- Group total -->
+            <tr class="mh-total-row">
+                <td colspan="4"></td>
+                <td class="text-end">
+                    @Lang["hist_total_cost"]: @string.Format("{0:c}", group.Sum(x => x.Cost))
+                </td>
+                <td></td>
             </tr>
-        </table>
-    </div>
-</body>
+        }
+    </table>
+</div>
 
+<!-- Grand total -->
+@if (ViewBag.Total > 0)
+{
+    <table class="table" style="width:97%; margin:0 auto;">
+        <tr class="mh-total-row">
+            <td colspan="4"></td>
+            <td class="text-end">
+                @Lang["hist_total_cost"]: @(((decimal)ViewBag.Total).ToString("C2"))
+            </td>
+        </tr>
+    </table>
+}

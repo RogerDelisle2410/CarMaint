@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<CarMaint.Models.CustomerData>
-
 @using Newtonsoft.Json.Linq
 
 @{
@@ -14,18 +13,14 @@
     try
     {
         string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
-        string jsonText = System.IO.File.ReadAllText(jsonPath);
-        Lang = JObject.Parse(jsonText);
+        Lang = JObject.Parse(System.IO.File.ReadAllText(jsonPath));
     }
     catch
     {
-        // Fallback to English if Azure can't find the file
         string fallbackPath = Server.MapPath("~/Lang/en.json");
-        string fallbackText = System.IO.File.ReadAllText(fallbackPath);
-        Lang = JObject.Parse(fallbackText);
+        Lang = JObject.Parse(System.IO.File.ReadAllText(fallbackPath));
     }
 }
-
 
 <h2>@Lang["ticket_title"]</h2>
 <h4>@Lang["ticket_select_customer"]</h4>
@@ -39,77 +34,112 @@
     </p>
 }
 
-<head>
-    <style type="text/css">
-        table {
-            width: 90%;
-            table-layout: fixed;
-        }
+@*<p>
+    @Html.ActionLink(
+        Lang["ticket_create_new"].ToString(),
+        "Create",
+        null,
+        new { @class = "btn-menu" }
+    )
+</p>*@
 
-        td {
-            border: 1px solid black;
-        }
+<style>
+    table {
+        width: 97%;
+        table-layout: fixed;
+        margin: 0 auto;
+    }
 
-        .scrollingTable {
-            width: 1150px;
-            overflow-y: auto;
-        }
-    </style>
+    th {
+        text-align: center;
+        vertical-align: middle;
+        border: none;
+        font-weight: bold;
+        padding: 6px;
+    }
 
-    <script type="text/javascript">
-        function makeTableScroll() {
-            var maxRows = 9;
-            var table = document.getElementById('myTable');
-            var wrapper = table.parentNode;
-            var rowsInTable = table.rows.length;
-            var height = 0;
-            if (rowsInTable > maxRows) {
-                for (var i = 0; i < maxRows; i++) {
-                    height += table.rows[i].clientHeight;
-                }
-                wrapper.style.height = height + "px";
+    td {
+        border: 1px solid black;
+        padding: 6px;
+    }
+
+    .scrollingTable {
+        width: 100%;
+        max-width: 1200px;
+        overflow-y: auto;
+    }
+
+    .btn-menu {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 12px;
+        color: #333;
+        text-decoration: none;
+        transition: 0.15s ease-in-out;
+    }
+
+        .btn-menu:hover {
+            background: #e6e6e6;
+            border-color: #999;
+            cursor: pointer;
+        }
+</style>
+
+<script>
+    function makeTableScroll() {
+        var maxRows = 9;
+        var table = document.getElementById('myTable');
+        var wrapper = table.parentNode;
+        var rowsInTable = table.rows.length;
+        var height = 0;
+        if (rowsInTable > maxRows) {
+            for (var i = 0; i < maxRows; i++) {
+                height += table.rows[i].clientHeight;
             }
+            wrapper.style.height = height + "px";
         }
-    </script>
-</head>
+    }
+</script>
 
-<body>
-    <br />
-    <table id="myTable2" class="table">
-        <tr>
-            <th>@Lang["col_name"]</th>
-            <th>@Lang["col_address"]</th>
-            <th>@Lang["col_city"]</th>
-            <th>@Lang["col_postal"]</th>
-            <th>@Lang["col_phone"]</th>
-            <th>@Lang["col_select_customer"]</th>
-        </tr>
+<table id="myTable2" class="table">
+    <tr>
+        <th>@Lang["col_name"]</th>
+        <th>@Lang["col_address"]</th>
+        <th>@Lang["col_city"]</th>
+        <th>@Lang["col_postal"]</th>
+        <th>@Lang["col_phone"]</th>
+        <th></th>
+    </tr>
+</table>
+
+<div class="scrollingTable">
+    <table id="myTable" class="table">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td style="text-align:center;">@item.Address</td>
+                <td style="text-align:center;">@item.City</td>
+                <td style="text-align:center;">@item.PostalCode</td>
+                <td style="text-align:center;">@item.Phone</td>
+
+                <td style="text-align:center;">
+                    @Html.ActionLink(
+                        Lang["btn_select"].ToString(),
+                        "Select",
+                        new { id = item.CustomerId },
+                        new { @class = "btn btn-success btn-sm" }
+                    )
+                </td>
+            </tr>
+        }
     </table>
-</body>
+</div>
 
-<body onload="makeTableScroll();">
-    <div class="scrollingTable">
-        <table id="myTable" class="table">
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Address)</td>
-                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.City)</td>
-                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.PostalCode)</td>
-                    <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Phone)</td>
-                    <td style="text-align: center;">
-                        @Html.ActionLink(
-                            Lang["btn_select"].ToString(),
-                            "Select",
-                            new { id = item.CustomerId },
-                            new { @class = "btn btn-success btn-sm" }
-                        )
-                    </td> 
-
-                    @*<td style="text-align: center;">@Html.ActionLink(Lang["btn_select"].ToString(), "Select", new { id = item.CustomerId })</td>*@
-                </tr>
-            }
-        </table>
-    </div>
-</body>
+<script>
+    makeTableScroll();
+</script>

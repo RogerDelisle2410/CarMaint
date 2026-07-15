@@ -7,6 +7,7 @@
     {
         lang = Request.Cookies["lang"].Value;
     }
+
     JObject Lang;
 
     try
@@ -33,54 +34,59 @@
         <h4>@Lang["create_customer_info"]</h4>
         <hr />
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.ValidationSummary(true, "", new { @class = "text-danger inline-msg" })
 
-        <div class="form-group">
-            @Html.Label(Lang["col_name"].ToString(), new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+        <!-- Name -->
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">@Lang["col_name"]</label>
+            <div class="col-sm-4 d-flex align-items-center">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control fixed-input" } })
+                @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger inline-msg" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.Label(Lang["col_address"].ToString(), new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Address, null, new { @class = "text-danger" })
+        <!-- Address -->
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">@Lang["col_address"]</label>
+            <div class="col-sm-4 d-flex align-items-center">
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control fixed-input" } })
+                @Html.ValidationMessageFor(model => model.Address, null, new { @class = "text-danger inline-msg" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.Label(Lang["col_city"].ToString(), new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.City, null, new { @class = "text-danger" })
+        <!-- City -->
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">@Lang["col_city"]</label>
+            <div class="col-sm-4 d-flex align-items-center">
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control fixed-input" } })
+                @Html.ValidationMessageFor(model => model.City, null, new { @class = "text-danger inline-msg" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.Label(Lang["col_postal"].ToString(), new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PostalCode, null, new { @class = "text-danger" })
+        <!-- Postal Code -->
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">@Lang["col_postal"]</label>
+            <div class="col-sm-4 d-flex align-items-center">
+                @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control fixed-input" } })
+                @Html.ValidationMessageFor(model => model.PostalCode, null, new { @class = "text-danger inline-msg" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.Label(Lang["col_phone"].ToString(), new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Phone, null, new { @class = "text-danger" })
+        <!-- Phone -->
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">@Lang["col_phone"]</label>
+            <div class="col-sm-4 d-flex align-items-center">
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control fixed-input" } })
+                @Html.ValidationMessageFor(model => model.Phone, null, new { @class = "text-danger inline-msg" })
             </div>
         </div>
 
-        <div class="form-group" style="margin-top:25px;">
-            <div class="col-md-offset-2 col-md-10" style="display:flex; gap:12px;">
-
-                <input type="submit"
-                       value="@Lang["create_button"]"
-                       class="btn btn-primary" />
+        <!-- Buttons -->
+        <div class="form-group" style="margin-top:20px;">
+            <div class="col-md-offset-2 col-md-4 d-flex gap-3">
+                <button type="submit" class="btn btn-primary">
+                    @Lang["create_button"]
+                </button>
 
                 @Html.ActionLink(
                     Lang["create_back_to_list"].ToString(),
@@ -88,13 +94,8 @@
                     null,
                     new { @class = "btn btn-secondary" }
                 )
-
             </div>
         </div>
 
     </div>
-}
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }

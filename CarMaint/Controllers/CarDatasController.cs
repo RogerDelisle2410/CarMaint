@@ -95,8 +95,8 @@ namespace CarMaint.Controllers
             JObject Lang = LoadLang();
 
             // JSON-based validation
-            if (carData.CustomerId == 0)
-                ModelState.AddModelError("CustomerId", Lang["customerid_required"].ToString());
+            if (carData.CustomerId == null || carData.CustomerId == 0)
+                ModelState.AddModelError("CustomerId", Lang["customerid_required"].ToString()); 
 
             if (string.IsNullOrWhiteSpace(carData.Manufacturer))
                 ModelState.AddModelError("Manufacturer", Lang["manufacturer_required"].ToString());
@@ -175,7 +175,7 @@ namespace CarMaint.Controllers
             JObject Lang = LoadLang();
 
             // JSON-based validation
-            if (carData.CustomerId == 0)
+            if (carData.CustomerId == null || carData.CustomerId == 0)
                 ModelState.AddModelError("CustomerId", Lang["customerid_required"].ToString());
 
             if (string.IsNullOrWhiteSpace(carData.Manufacturer))

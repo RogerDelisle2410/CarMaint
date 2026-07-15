@@ -98,3 +98,36 @@ input[type=checkbox] {
         text-decoration: underline;
         color: #007bff;
     }
+
+.inline-input {
+    display: inline-block;
+    vertical-align: middle;
+    width: 250px; /* optional: keeps inputs consistent */
+}
+
+.inline-msg {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+.control-label {
+    text-align: center;
+}
+.inline-input {
+    width: 350px;
+    flex-shrink: 0;
+}
+
+.inline-msg {
+    white-space: nowrap;
+    margin-left: 12px;
+}
+.fixed-input {
+    width: 250px !important; /* force exact width */
+    max-width: 250px !important;    
+    min-width: 250px !important;
+    flex-shrink: 0;
+}
+    
+

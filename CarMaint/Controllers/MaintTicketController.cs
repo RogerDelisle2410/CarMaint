@@ -103,6 +103,12 @@ namespace CarMaint.Controllers
                 case "Electric":
                     maint = maint.Where(ma => ma.Electric == true);
                     break;
+                case "Hybrid":
+                    maint = maint.Where(ma => ma.Hybrid == true);
+                    break;
+                case "Turbo":
+                    maint = maint.Where(ma => ma.Turbo == true);
+                    break;
             }
 
             // IMPORTANT: SQL cannot sort by TaskName (not a column)

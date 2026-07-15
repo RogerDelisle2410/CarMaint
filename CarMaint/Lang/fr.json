@@ -153,5 +153,7 @@
   "veh_search": "Rechercher",
   "veh_title": "Informations sur le Véhicule",
   "year": "Année",
-  "year_required": "L'année est requise."
+  "year_required": "L'année est requise.",
+  "hybrid": "Hybrid",
+  "turbo": "Turbo"
 }

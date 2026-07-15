@@ -93,8 +93,15 @@ namespace CarMaint.Controllers
                 ModelState.AddModelError("Cost", Lang["cost_required"].ToString());
 
             // At least one fuel type must be selected
-            if (!maintenanceType.Gas && !maintenanceType.Diesel && !maintenanceType.Electric)
+            if (maintenanceType.Gas != true &&
+                maintenanceType.Diesel != true &&
+                maintenanceType.Electric != true &&
+                maintenanceType.Hybrid != true &&
+                maintenanceType.Turbo != true)
+            {
                 ModelState.AddModelError("Gas", Lang["fuel_required"].ToString());
+            }
+
 
             if (!ModelState.IsValid)
                 return View(maintenanceType);
@@ -119,16 +126,16 @@ namespace CarMaint.Controllers
         public ActionResult Edit(MaintenanceType item)
         {
             JObject Lang = LoadLang();
-            string lang = Request.Cookies["lang"]?.Value ?? "en";
+            //string lang = Request.Cookies["lang"]?.Value ?? "en";
 
-            // Validate ONLY the active language field
-            if (lang == "en" && string.IsNullOrWhiteSpace(item.TaskName_EN))
+             
+            if (string.IsNullOrWhiteSpace(item.TaskName_EN))
                 ModelState.AddModelError("TaskName_EN", Lang["taskname_en_required"].ToString());
 
-            if (lang == "fr" && string.IsNullOrWhiteSpace(item.TaskName_FR))
+            if (string.IsNullOrWhiteSpace(item.TaskName_FR))
                 ModelState.AddModelError("TaskName_FR", Lang["taskname_fr_required"].ToString());
 
-            if (lang == "es" && string.IsNullOrWhiteSpace(item.TaskName_ES))
+            if (string.IsNullOrWhiteSpace(item.TaskName_ES))
                 ModelState.AddModelError("TaskName_ES", Lang["taskname_es_required"].ToString());
 
             // Cost is string → validate properly
@@ -136,8 +143,16 @@ namespace CarMaint.Controllers
                 ModelState.AddModelError("Cost", Lang["cost_required"].ToString());
 
             // At least one fuel type must be selected
-            if (!item.Gas && !item.Diesel && !item.Electric)
+            if (!item.Gas &&
+    !item.Diesel &&
+    !item.Electric &&
+    !item.Hybrid &&
+    !item.Turbo)
+            {
                 ModelState.AddModelError("Gas", Lang["fuel_required"].ToString());
+            }
+
+
 
             if (!ModelState.IsValid)
                 return View(item);

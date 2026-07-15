@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<CarMaint.Models.CarData>
+
 @using Newtonsoft.Json.Linq
 
 @{
-    // Load language JSON (views cannot access layout variables)
     string lang = "en";
     if (Request.Cookies["lang"] != null)
     {
@@ -14,14 +14,12 @@
     try
     {
         string jsonPath = Server.MapPath("~/Lang/" + lang + ".json");
-        string jsonText = System.IO.File.ReadAllText(jsonPath);
-        Lang = JObject.Parse(jsonText);
+        Lang = JObject.Parse(System.IO.File.ReadAllText(jsonPath));
     }
     catch
     {
         string fallbackPath = Server.MapPath("~/Lang/en.json");
-        string fallbackText = System.IO.File.ReadAllText(fallbackPath);
-        Lang = JObject.Parse(fallbackText);
+        Lang = JObject.Parse(System.IO.File.ReadAllText(fallbackPath));
     }
 }
 
@@ -34,7 +32,6 @@
         <input type="submit" value="@Lang["veh_search"]" />
     </p>
 }
-
 <p>
     @Html.ActionLink(
         Lang["veh_create_new"].ToString(),
@@ -46,20 +43,28 @@
 
 <style>
     table {
-        width: 100%;
+        width: 97%;
         table-layout: fixed;
+        margin: 0 auto;
     }
 
-    th, td {
+    th {
+        text-align: center;
+        vertical-align: middle;
+        border: none;
+        font-weight: bold;
+        padding: 6px;
+    }
+
+    td {
         border: 1px solid black;
         padding: 6px;
     }
 
     .scrollingTable {
-        max-height: 350px;
-        overflow-y: auto;
         width: 100%;
-        max-width: 1150px;
+        max-width: 1200px;
+        overflow-y: auto;
     }
 
     .btn-menu {
@@ -89,7 +94,6 @@
         var wrapper = table.parentNode;
         var rowsInTable = table.rows.length;
         var height = 0;
-
         if (rowsInTable > maxRows) {
             for (var i = 0; i < maxRows; i++) {
                 height += table.rows[i].clientHeight;
@@ -99,51 +103,50 @@
     }
 </script>
 
-<br />
+<!-- Header Table -->
+<table id="myTable2" class="table">
+    <tr>
+        <th>@Lang["col_customer_name"]</th>
+        <th>@Lang["col_manufacturer"]</th>
+        <th>@Lang["col_model"]</th>
+        <th>@Lang["col_year"]</th>
+        <th>@Lang["col_engine"]</th>
+        <th>@Lang["col_mileage"]</th>
+        <th></th>
+    </tr>
+</table>
 
+
+<!-- Scrolling Table -->
 <div class="scrollingTable">
     <table id="myTable" class="table">
-        <thead>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>@Lang["col_customer_name"]</th>
-                <th>@Lang["col_manufacturer"]</th>
-                <th>@Lang["col_model"]</th>
-                <th>@Lang["col_year"]</th>
-                <th>@Lang["col_engine"]</th>
-                <th>@Lang["col_mileage"]</th>
-                <th></th>
+                <td>@item.CustomerData.Name</td>
+                <td style="text-align: center;">@item.Manufacturer</td>
+                <td style="text-align: center;">@item.Model</td>
+                <td style="text-align: center;">@item.Year</td>
+                <td style="text-align: center;">@item.EngineType</td>
+                <td style="text-align: center;">@item.Mileage</td>
+
+                <td style="text-align:center;">
+                    @Html.ActionLink(
+                        Lang["btn_edit"].ToString(),
+                        "Edit",
+                        new { id = item.CarId },
+                        new { @class = "btn btn-primary btn-sm" }
+                    )
+
+                    @Html.ActionLink(
+                        Lang["btn_details"].ToString(),
+                        "Details",
+                        new { id = item.CarId },
+                        new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" }
+                    )
+                </td>
             </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.CustomerData.Name</td>
-                    <td style="text-align:center;">@item.Manufacturer</td>
-                    <td style="text-align:center;">@item.Model</td>
-                    <td style="text-align:center;">@item.Year</td>
-                    <td style="text-align:center;">@item.EngineType</td>
-                    <td style="text-align:center;">@item.Mileage</td>
-
-                    <td style="text-align:center; width:200px;">
-                        @Html.ActionLink(
-                            Lang["btn_edit"].ToString(),
-                            "Edit",
-                            new { id = item.CarId },
-                            new { @class = "btn btn-primary btn-sm" }
-                        )
-
-                        @Html.ActionLink(
-                            Lang["btn_details"].ToString(),
-                            "Details",
-                            new { id = item.CarId },
-                            new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" }
-                        )
-                    </td>
-                </tr>
-            }
-        </tbody>
+        }
     </table>
 </div>
 

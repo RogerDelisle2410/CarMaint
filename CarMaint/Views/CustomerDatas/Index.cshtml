@@ -19,7 +19,6 @@
     }
     catch
     {
-        // Fallback to English if Azure can't find the file
         string fallbackPath = Server.MapPath("~/Lang/en.json");
         string fallbackText = System.IO.File.ReadAllText(fallbackPath);
         Lang = JObject.Parse(fallbackText);
@@ -43,116 +42,119 @@
         null,
         new { @class = "btn-menu" }
     )
-</p> 
-<head>
-    <style type="text/css">
-        table {
-            width: 97%;
-            table-layout: fixed;
-            align-content: center;
-        }
+</p>
 
-        td {
-            border: 1px solid black;
-        }
+<style type="text/css">
+    table {
+        width: 97%;
+        table-layout: fixed;
+        margin: 0 auto;
+    }
 
-        .scrollingTable {
-            width: 1200px;
-            overflow-y: auto;
-        }
+    th {
+        text-align: center;
+        vertical-align: middle;
+        border: none;
+        font-weight: bold;
+        padding: 6px;
+    }
 
-        .btn-menu {
-            display: inline-block;
-            padding: 6px 12px; /* smaller padding */
-            background: #f2f2f2;
-            border: 1px solid #ccc;
-            border-radius: 4px; /* slightly smaller radius */
-            font-weight: bold;
-            font-size: 12px; /* smaller text */
-            color: #333;
-            text-decoration: none;
-            transition: 0.15s ease-in-out;
-        }
+    td {
+        border: 1px solid black;
+        padding: 6px;
+    }
 
-            .btn-menu:hover {
-                background: #e6e6e6;
-                border-color: #999;
-                cursor: pointer;
+    .scrollingTable {
+        width: 100%;
+        max-width: 1200px;
+        overflow-y: auto;
+    }
+
+    .btn-menu {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 12px;
+        color: #333;
+        text-decoration: none;
+        transition: 0.15s ease-in-out;
+    }
+
+        .btn-menu:hover {
+            background: #e6e6e6;
+            border-color: #999;
+            cursor: pointer;
+        }
+</style>
+
+<script type="text/javascript">
+    function makeTableScroll() {
+        var maxRows = 10;
+        var table = document.getElementById('myTable');
+        var wrapper = table.parentNode;
+        var rowsInTable = table.rows.length;
+        var height = 0;
+        if (rowsInTable > maxRows) {
+            for (var i = 0; i < maxRows; i++) {
+                height += table.rows[i].clientHeight;
             }
-    </style>
-
-    <script type="text/javascript">
-        function makeTableScroll() {
-            var maxRows = 10;
-            var table = document.getElementById('myTable');
-            var wrapper = table.parentNode;
-            var rowsInTable = table.rows.length;
-            var height = 0;
-            if (rowsInTable > maxRows) {
-                for (var i = 0; i < maxRows; i++) {
-                    height += table.rows[i].clientHeight;
-                }
-                wrapper.style.height = height + "px";
-            }
+            wrapper.style.height = height + "px";
         }
-    </script>
-</head>
-<body onload="makeTableScroll();">
-    <div class="scrollingTable">
-        <table id="myTable" class="table">
+    }
+</script>
+
+<table id="myTable2" class="table">
+    <tr>
+        <th>@Lang["col_name"]</th>
+        <th>@Lang["col_address"]</th>
+        <th>@Lang["col_city"]</th>
+        <th>@Lang["col_postal"]</th>
+        <th>@Lang["col_phone"]</th>
+        <th>@Lang["Select"]</th>
+        <th></th>
+    </tr>
+</table>
+
+<div class="scrollingTable">
+    <table id="myTable" class="table">
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>@Lang["col_name"]</th>
-                <th width="200px">@Lang["col_address"]</th>
-                <th width="150px">@Lang["col_city"]</th>
-                <th width="100px">@Lang["col_postal"]</th>
-                <th width="150px">@Lang["col_phone"]</th>
-                <th width="100px">@Lang["Select"]</th>
-                <th>@Lang["Actions"]</th>
+                <td>@item.Name</td>
+                <td style="text-align: center;">@item.Address</td>
+                <td style="text-align: center;">@item.City</td>
+                <td style="text-align: center;">@item.PostalCode</td>
+                <td style="text-align: center;">@item.Phone</td>
+                <td style="text-align: center;">
+                    @Html.ActionLink("Select", "Select", "MaintTicket", new { id = item.CustomerId },
+                        new { @class = "btn btn-success btn-sm" }
+                    )
+                </td>
+
+                <td style="text-align: center;">
+                    @Html.ActionLink( Lang["btn_edit"].ToString(), "Edit", new { id = item.CustomerId },
+                        new { @class = "btn btn-primary btn-sm" }
+                    )
+
+                    @Html.ActionLink(Lang["btn_details"].ToString(), "Details", new { id = item.CustomerId },
+                        new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" }
+                    )
+
+                    @*@Html.ActionLink(
+                            Lang["btn_delete"].ToString(),
+                            "Delete",
+                            new { id = item.CustomerId },
+                            new { @class = "btn btn-danger btn-sm", style = "margin-left: 6px;" }
+                        )*@
+                </td>
+
             </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td style="text-align: center;">@item.Address</td>
-                    <td style="text-align: center;">@item.City</td>
-                    <td style="text-align: center;">@item.PostalCode</td>
-                    <td style="text-align: center;">@item.Phone</td>
-                    <td style="text-align: center;">
-                        @Html.ActionLink(
-                            "Select",
-                            "Select",
-                            "MaintTicket",
-                            new { id = item.CustomerId },
-                            new { @class = "btn btn-success btn-sm" }
-                        )
-                    </td>
-
-                    <td style="text-align: center;">
-                        @Html.ActionLink(
-                            Lang["btn_edit"].ToString(),
-                            "Edit",
-                            new { id = item.CustomerId },
-                            new { @class = "btn btn-primary btn-sm" }
-                        )
-
-                        @Html.ActionLink(
-                            Lang["btn_details"].ToString(),
-                            "Details",
-                            new { id = item.CustomerId },
-                            new { @class = "btn btn-info btn-sm", style = "margin-left: 6px;" }
-                        )
-
-                        @*@Html.ActionLink(
-                                Lang["btn_delete"].ToString(),
-                                "Delete",
-                                new { id = item.CustomerId },
-                                new { @class = "btn btn-danger btn-sm", style = "margin-left: 6px;" }
-                            )*@
-                    </td>
-
-                </tr>
-            }
-        </table>
-    </div>
-</body>
+        }
+    </table>
+</div>
+<script>
+    makeTableScroll();
+</script>
